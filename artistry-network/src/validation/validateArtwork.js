@@ -4,7 +4,7 @@ function validateArtwork(data, file, isEdit = false) {
     if (!data.description) error.description = 'Vui lòng nhập mô tả';
     if (!data.price) error.price = 'Vui lòng nhập giá';
     if (!data.dimensions) error.dimensions = 'Vui lòng nhập kich thước';
-    if (!data.category) error.category = 'Vui lòng nhập tên thể loại';
+    if (!data.categoryId) error.category = 'Vui lòng nhập tên thể loại';
     if (file.length === 0 && !isEdit) {
         error.image = 'Vui lòng chọn file';
     }

@@ -1,5 +1,4 @@
 const express = require('express');
-const multer = require('multer');
 const userController = require('../controller/userController');
 const artworkController = require('../controller/artworkController');
 const categoryController = require('../controller/categoryController');
@@ -14,7 +13,7 @@ router.post('/login', userController.loginMember);
 router.get('/artwork', artworkController.getApprovedArtworks);
 router.get('/artwork/:id', artworkController.getArtworkById);
 // Route cần đăng nhập
-router.post('/addArtwork', requireAuth, artworkController.upload, artworkController.createArtwork);
+router.post('/artwork/add', requireAuth, artworkController.upload, artworkController.createArtwork);
 
 //category admin
 router.post('/admin/category/add', requireAuth, categoryController.addCategory);

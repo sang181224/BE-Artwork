@@ -1,11 +1,13 @@
 // File: src/controllers/artwork.controller.js
 const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const validateArtwork = require('../validation/validateArtwork');
 const artworkModel = require('../model/artworkModel');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/uploads/artworks'); // Thư mục lưu trữ tệp hình ảnh (phải tạo sẵn)
+        cb(null, 'public/uploads/artworks');
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -41,7 +43,8 @@ const getArtworkById = async (req, res) => {
 
 // Tạo tác phẩm mới
 const createArtwork = async (req, res) => {
-    const userId = req.user.userId;
+    console.log(req.body);
+    const authorId = req.user.userId;
     const imageUrls = req.files || [];
     try {
         const data = req.body;
@@ -56,17 +59,17 @@ const createArtwork = async (req, res) => {
         }
         data.image = imageUrls ? imageUrls.map(file => file.path) : [];
         data.image = JSON.stringify(data.image);
-        const dataAdd = ({
-            title,
-            description,
-            price: parseFloat(price),
+        const artworkData = ({
+            title: data.title,
+            description: data.description,
+            price: parseFloat(data.price),
             status: 'pending', // Mặc định là chờ duyệt
-            imageUrls,
-            dimensions,
-            authorId,
-            categoryId: parseInt(categoryId),
+            imageUrls: data.image,
+            dimensions: data.dimensions,
+            authorId: authorId,
+            categoryId: parseInt(data.categoryId),
         });
-        console.log(dataAdd);
+        console.log(artworkData);
         const newArtwork = await artworkModel.create(artworkData);
         res.status(201).json(newArtwork);
     } catch (error) {
