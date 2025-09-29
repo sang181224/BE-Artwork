@@ -1,0 +1,126 @@
+generator client {
+    provider = "prisma-client-js"
+    output   = "./src/generated/client"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+// ===== AUTH & USER MODELS =====
+
+model User {
+    id        Int      @id @default(autoincrement())
+    name      String
+    avatarUrl String?  @db.Text
+    phone     String?  @unique
+    email     String   @unique
+    password  String   @db.Text
+    createdAt DateTime @default(now())
+
+    roleId Int
+    role   Role @relation(fields: [roleId], references: [id])
+
+    // Relations
+    artworks  Artwork[]
+    comments  Comment[]
+    reactions Reaction[]
+    following Follows[]  @relation("Following") // Danh sách những người mình theo dõi
+    followers Follows[]  @relation("Followers")
+}
+
+model Role {
+    id          Int     @id @default(autoincrement())
+    name        String  @unique // e.g., "Admin", "Member"
+    description String?
+    users       User[]
+}
+
+// ===== ARTWORK MODELS =====
+
+model Artwork {
+    id          Int              @id @default(autoincrement())
+    title       String           @db.Text
+    description String?          @db.Text
+    price       Float?
+    status      String // 'draft', 'pending', 'approved', 'rejected'
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+    dimensions  String?
+    imageUrls   String
+    authorId    Int
+    author      User             @relation(fields: [authorId], references: [id])
+    categoryId  Int
+    category    Category         @relation(fields: [categoryId], references: [id])
+    // Relations
+    hashtags    ArtworkHashtag[]
+    reactions   Reaction[]
+    comments    Comment[]
+}
+
+model Category {
+    id       Int       @id @default(autoincrement())
+    name     String    @unique
+    artworks Artwork[]
+}
+
+model Hashtag {
+    id       Int              @id @default(autoincrement())
+    name     String           @unique // e.g., #landscape, #abstract
+    artworks ArtworkHashtag[]
+}
+
+// Join table for Artwork and Hashtag (Many-to-Many)
+model ArtworkHashtag {
+    artworkId Int
+    artwork   Artwork @relation(fields: [artworkId], references: [id])
+
+    hashtagId Int
+    hashtag   Hashtag @relation(fields: [hashtagId], references: [id])
+
+    @@id([artworkId, hashtagId])
+}
+
+// ===== INTERACTION MODELS =====
+
+model Comment {
+    id         Int      @id @default(autoincrement())
+    content    String
+    image_user String   @db.Text
+    parentId   Int?
+    authorId   Int
+    artworkId  Int
+    author     User     @relation(fields: [authorId], references: [id])
+    artwork    Artwork  @relation(fields: [artworkId], references: [id])
+    createdAt  DateTime @default(now())
+}
+
+model ReactionType {
+    id        Int        @id @default(autoincrement())
+    name      String     @unique // e.g., "like", "love", "haha"
+    reactions Reaction[]
+}
+
+// Join table for User, Artwork, and ReactionType
+model Reaction {
+    userId         Int
+    user           User         @relation(fields: [userId], references: [id])
+    artworkId      Int
+    artwork        Artwork      @relation(fields: [artworkId], references: [id])
+    reactionTypeId Int
+    reactionType   ReactionType @relation(fields: [reactionTypeId], references: [id])
+    createdAt      DateTime     @default(now())
+
+    @@id([userId, artworkId])
+}
+
+model Follows {
+    followerId Int
+    follower   User @relation("Following", fields: [followerId], references: [id])
+
+    followingId Int
+    following   User @relation("Followers", fields: [followingId], references: [id])
+
+    @@id([followerId, followingId])
+}
