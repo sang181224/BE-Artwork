@@ -49,8 +49,8 @@ const createMember = async (req, res) => {
     }
 
 }
-function createJWT(userId, username) {
-    const token = jwt.sign({ userId, username }, 'sang181224', { expiresIn: '5h' });
+function createJWT(userId, username, roleId) {
+    const token = jwt.sign({ userId, username, roleId }, 'sang181224', { expiresIn: '5h' });
     return token;
 }
 const loginMember = async (req, res) => {
@@ -69,7 +69,7 @@ const loginMember = async (req, res) => {
     if (!checkLogin) {
         return res.status(400).json({ message: 'email hoặc password không chính xác' });
     }
-    const token = createJWT(checkLogin.id, checkLogin.name)
+    const token = createJWT(checkLogin.id, checkLogin.name, checkLogin.roleId)
     res.json({ message: 'Đăng nhập thành công', token: token, user: checkLogin })
 }
 const getMemberById = async (req, res) => {

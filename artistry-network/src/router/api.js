@@ -4,6 +4,7 @@ const artworkController = require('../controller/artworkController');
 const categoryController = require('../controller/categoryController');
 const requireAuth = require('../middleware/requireAuth');
 const optionalAuth = require('../middleware/optionalAuth');
+const requireAdmin = require('../middleware/requireAdmin');
 
 const router = express.Router();
 //auth
@@ -11,7 +12,7 @@ router.post('/register', userController.upload, userController.createMember);
 router.post('/login', userController.loginMember);
 
 //profile
-router.get('/profiles/:id',optionalAuth, userController.getProfile);        
+router.get('/profiles/:id', optionalAuth, userController.getProfile);
 router.post('/:id/follow', requireAuth, userController.follow); //theo dõi, bỏ theo dõi
 router.get('/profiles/:id/stats', userController.getProfileStats);
 router.get('/profiles/:id/artworks', userController.getProfileArtworks);//Lấy các tác phẩm trong trong profile 
@@ -26,9 +27,18 @@ router.get('/artwork/:id', artworkController.getArtworkById);
 // Route cần đăng nhập
 router.post('/artwork/add', requireAuth, artworkController.upload, artworkController.createArtwork);
 
+// ADMIN
 //category admin
-router.post('/admin/category/add', requireAuth, categoryController.addCategory);
-router.put('/admin/category/edit/:id', requireAuth, categoryController.editCategory);
-router.delete('/admin/category/delete/:id', requireAuth, categoryController.deleteCategory);
+router.post('/admin/category/add', requireAuth, requireAdmin, categoryController.addCategory);
+router.put('/admin/category/edit/:id', requireAuth, requireAdmin, categoryController.editCategory);
+router.delete('/admin/category/delete/:id', requireAuth, requireAdmin, categoryController.deleteCategory);
 router.get('/admin/category/list', categoryController.getCategoryList);
+
+//artwork
+//api lấy danh sách tác phẩm đang chờ duyệt
+router.get('/admin/artworks/pending', requireAuth, requireAdmin, artworkController.getPendingArtworks);
+//api duyệt tác phẩm
+router.put('/admin/artworks/approve', requireAuth, requireAdmin, artworkController.approveArtwork);
+//api từ chối tác phẩm
+router.put('/admin/artworks/reject', requireAuth, requireAdmin, artworkController.rejectArtwork);
 module.exports = router;

@@ -40,10 +40,30 @@ const remove = (id) => {
     });
 };
 
+//admin 
+//admin tìm các tác phẩm ở trạng thái chờ duêtj
+const findByStatus = (status) => {
+    return prisma.artwork.findMany({
+        where: { status },
+        orderBy: { createdAt: 'asc' },
+        include: {
+            author: { select: { id: true, name: true } }
+        }
+    });
+};
+//api duyệt haowcj từ chối
+const updateStatus = (id, status) => {
+    return prisma.artwork.update({
+        where: { id: parseInt(id) },
+        data: { status }
+    });
+};
 module.exports = {
     findAllApproved,
     findById,
     create,
     update,
     remove,
+    findByStatus,
+    updateStatus
 };

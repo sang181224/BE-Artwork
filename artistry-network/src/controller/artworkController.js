@@ -80,11 +80,42 @@ const createArtwork = async (req, res) => {
     }
 };
 
+//admin
+// Lấy danh sách các tác phẩm đang chờ duyệt
+const getPendingArtworks = async (req, res) => {
+    try {
+        const artworks = await artworkModel.findByStatus('pending');
+        res.status(200).json(artworks);
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
+// Duyệt một tác phẩm
+const approveArtwork = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await artworkModel.updateStatus(id, 'approved');
+        res.status(200).json({ message: "Tác phẩm đã được phê duyệt." });
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
+// Từ chối một tác phẩm
+const rejectArtwork = async (req, res) => {
+     try {
+        const { id } = req.params;
+        await artworkModel.updateStatus(id, 'rejected');
+        res.status(200).json({ message: "Tác phẩm đã bị từ chối." });
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
 module.exports = {
     upload,
     getApprovedArtworks,
     getArtworkById,
     createArtwork,
-    // updateArtwork, // (sẽ được thêm sau)
-    // deleteArtwork, // (sẽ được thêm sau)
+    getPendingArtworks,
+    approveArtwork,
+    rejectArtwork
 };
