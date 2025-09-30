@@ -128,6 +128,9 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   createdAt: 'createdAt',
+  coverPhotoUrl: 'coverPhotoUrl',
+  bio: 'bio',
+  skills: 'skills',
   roleId: 'roleId'
 };
 
@@ -198,6 +201,22 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
@@ -208,7 +227,9 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   avatarUrl: 'avatarUrl',
   phone: 'phone',
   email: 'email',
-  password: 'password'
+  password: 'password',
+  coverPhotoUrl: 'coverPhotoUrl',
+  bio: 'bio'
 };
 
 exports.Prisma.RoleOrderByRelevanceFieldEnum = {

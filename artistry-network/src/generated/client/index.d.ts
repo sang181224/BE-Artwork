@@ -1868,6 +1868,8 @@ export namespace Prisma {
     email: string | null
     password: string | null
     createdAt: Date | null
+    coverPhotoUrl: string | null
+    bio: string | null
     roleId: number | null
   }
 
@@ -1879,6 +1881,8 @@ export namespace Prisma {
     email: string | null
     password: string | null
     createdAt: Date | null
+    coverPhotoUrl: string | null
+    bio: string | null
     roleId: number | null
   }
 
@@ -1890,6 +1894,9 @@ export namespace Prisma {
     email: number
     password: number
     createdAt: number
+    coverPhotoUrl: number
+    bio: number
+    skills: number
     roleId: number
     _all: number
   }
@@ -1913,6 +1920,8 @@ export namespace Prisma {
     email?: true
     password?: true
     createdAt?: true
+    coverPhotoUrl?: true
+    bio?: true
     roleId?: true
   }
 
@@ -1924,6 +1933,8 @@ export namespace Prisma {
     email?: true
     password?: true
     createdAt?: true
+    coverPhotoUrl?: true
+    bio?: true
     roleId?: true
   }
 
@@ -1935,6 +1946,9 @@ export namespace Prisma {
     email?: true
     password?: true
     createdAt?: true
+    coverPhotoUrl?: true
+    bio?: true
+    skills?: true
     roleId?: true
     _all?: true
   }
@@ -2033,6 +2047,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt: Date
+    coverPhotoUrl: string | null
+    bio: string | null
+    skills: JsonValue | null
     roleId: number
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
@@ -2063,6 +2080,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     createdAt?: boolean
+    coverPhotoUrl?: boolean
+    bio?: boolean
+    skills?: boolean
     roleId?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
     artworks?: boolean | User$artworksArgs<ExtArgs>
@@ -2083,10 +2103,13 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     createdAt?: boolean
+    coverPhotoUrl?: boolean
+    bio?: boolean
+    skills?: boolean
     roleId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "avatarUrl" | "phone" | "email" | "password" | "createdAt" | "roleId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "avatarUrl" | "phone" | "email" | "password" | "createdAt" | "coverPhotoUrl" | "bio" | "skills" | "roleId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     artworks?: boolean | User$artworksArgs<ExtArgs>
@@ -2115,6 +2138,9 @@ export namespace Prisma {
       email: string
       password: string
       createdAt: Date
+      coverPhotoUrl: string | null
+      bio: string | null
+      skills: Prisma.JsonValue | null
       roleId: number
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -2498,6 +2524,9 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
+    readonly coverPhotoUrl: FieldRef<"User", 'String'>
+    readonly bio: FieldRef<"User", 'String'>
+    readonly skills: FieldRef<"User", 'Json'>
     readonly roleId: FieldRef<"User", 'Int'>
   }
     
@@ -11813,6 +11842,9 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     createdAt: 'createdAt',
+    coverPhotoUrl: 'coverPhotoUrl',
+    bio: 'bio',
+    skills: 'skills',
     roleId: 'roleId'
   };
 
@@ -11916,6 +11948,31 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const QueryMode: {
+    default: 'default',
+    insensitive: 'insensitive'
+  };
+
+  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
   export const NullsOrder: {
     first: 'first',
     last: 'last'
@@ -11929,7 +11986,9 @@ export namespace Prisma {
     avatarUrl: 'avatarUrl',
     phone: 'phone',
     email: 'email',
-    password: 'password'
+    password: 'password',
+    coverPhotoUrl: 'coverPhotoUrl',
+    bio: 'bio'
   };
 
   export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
@@ -12010,6 +12069,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -12030,6 +12103,9 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
+    coverPhotoUrl?: StringNullableFilter<"User"> | string | null
+    bio?: StringNullableFilter<"User"> | string | null
+    skills?: JsonNullableFilter<"User">
     roleId?: IntFilter<"User"> | number
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
     artworks?: ArtworkListRelationFilter
@@ -12047,6 +12123,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    coverPhotoUrl?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
+    skills?: SortOrderInput | SortOrder
     roleId?: SortOrder
     role?: RoleOrderByWithRelationInput
     artworks?: ArtworkOrderByRelationAggregateInput
@@ -12068,6 +12147,9 @@ export namespace Prisma {
     avatarUrl?: StringNullableFilter<"User"> | string | null
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
+    coverPhotoUrl?: StringNullableFilter<"User"> | string | null
+    bio?: StringNullableFilter<"User"> | string | null
+    skills?: JsonNullableFilter<"User">
     roleId?: IntFilter<"User"> | number
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
     artworks?: ArtworkListRelationFilter
@@ -12085,6 +12167,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    coverPhotoUrl?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
+    skills?: SortOrderInput | SortOrder
     roleId?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
@@ -12104,6 +12189,9 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    coverPhotoUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
+    bio?: StringNullableWithAggregatesFilter<"User"> | string | null
+    skills?: JsonNullableWithAggregatesFilter<"User">
     roleId?: IntWithAggregatesFilter<"User"> | number
   }
 
@@ -12613,6 +12701,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role: RoleCreateNestedOneWithoutUsersInput
     artworks?: ArtworkCreateNestedManyWithoutAuthorInput
     comments?: CommentCreateNestedManyWithoutAuthorInput
@@ -12629,6 +12720,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId: number
     artworks?: ArtworkUncheckedCreateNestedManyWithoutAuthorInput
     comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
@@ -12644,6 +12738,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     artworks?: ArtworkUpdateManyWithoutAuthorNestedInput
     comments?: CommentUpdateManyWithoutAuthorNestedInput
@@ -12660,6 +12757,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId?: IntFieldUpdateOperationsInput | number
     artworks?: ArtworkUncheckedUpdateManyWithoutAuthorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
@@ -12676,6 +12776,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId: number
   }
 
@@ -12686,6 +12789,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -12696,6 +12802,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -13185,6 +13294,29 @@ export namespace Prisma {
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type RoleScalarRelationFilter = {
     is?: RoleWhereInput
@@ -13250,6 +13382,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    coverPhotoUrl?: SortOrder
+    bio?: SortOrder
+    skills?: SortOrder
     roleId?: SortOrder
   }
 
@@ -13266,6 +13401,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    coverPhotoUrl?: SortOrder
+    bio?: SortOrder
     roleId?: SortOrder
   }
 
@@ -13277,6 +13414,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    coverPhotoUrl?: SortOrder
+    bio?: SortOrder
     roleId?: SortOrder
   }
 
@@ -13349,6 +13488,32 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type UserListRelationFilter = {
@@ -14626,6 +14791,29 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
@@ -14969,6 +15157,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     artworks?: ArtworkCreateNestedManyWithoutAuthorInput
     comments?: CommentCreateNestedManyWithoutAuthorInput
     reactions?: ReactionCreateNestedManyWithoutUserInput
@@ -14984,6 +15175,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     artworks?: ArtworkUncheckedCreateNestedManyWithoutAuthorInput
     comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
     reactions?: ReactionUncheckedCreateNestedManyWithoutUserInput
@@ -15028,6 +15222,9 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
+    coverPhotoUrl?: StringNullableFilter<"User"> | string | null
+    bio?: StringNullableFilter<"User"> | string | null
+    skills?: JsonNullableFilter<"User">
     roleId?: IntFilter<"User"> | number
   }
 
@@ -15038,6 +15235,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role: RoleCreateNestedOneWithoutUsersInput
     comments?: CommentCreateNestedManyWithoutAuthorInput
     reactions?: ReactionCreateNestedManyWithoutUserInput
@@ -15053,6 +15253,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId: number
     comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
     reactions?: ReactionUncheckedCreateNestedManyWithoutUserInput
@@ -15164,6 +15367,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     comments?: CommentUpdateManyWithoutAuthorNestedInput
     reactions?: ReactionUpdateManyWithoutUserNestedInput
@@ -15179,6 +15385,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId?: IntFieldUpdateOperationsInput | number
     comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
     reactions?: ReactionUncheckedUpdateManyWithoutUserNestedInput
@@ -15472,6 +15681,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role: RoleCreateNestedOneWithoutUsersInput
     artworks?: ArtworkCreateNestedManyWithoutAuthorInput
     reactions?: ReactionCreateNestedManyWithoutUserInput
@@ -15487,6 +15699,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId: number
     artworks?: ArtworkUncheckedCreateNestedManyWithoutAuthorInput
     reactions?: ReactionUncheckedCreateNestedManyWithoutUserInput
@@ -15553,6 +15768,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     artworks?: ArtworkUpdateManyWithoutAuthorNestedInput
     reactions?: ReactionUpdateManyWithoutUserNestedInput
@@ -15568,6 +15786,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId?: IntFieldUpdateOperationsInput | number
     artworks?: ArtworkUncheckedUpdateManyWithoutAuthorNestedInput
     reactions?: ReactionUncheckedUpdateManyWithoutUserNestedInput
@@ -15662,6 +15883,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role: RoleCreateNestedOneWithoutUsersInput
     artworks?: ArtworkCreateNestedManyWithoutAuthorInput
     comments?: CommentCreateNestedManyWithoutAuthorInput
@@ -15677,6 +15901,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId: number
     artworks?: ArtworkUncheckedCreateNestedManyWithoutAuthorInput
     comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
@@ -15757,6 +15984,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     artworks?: ArtworkUpdateManyWithoutAuthorNestedInput
     comments?: CommentUpdateManyWithoutAuthorNestedInput
@@ -15772,6 +16002,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId?: IntFieldUpdateOperationsInput | number
     artworks?: ArtworkUncheckedUpdateManyWithoutAuthorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
@@ -15848,6 +16081,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role: RoleCreateNestedOneWithoutUsersInput
     artworks?: ArtworkCreateNestedManyWithoutAuthorInput
     comments?: CommentCreateNestedManyWithoutAuthorInput
@@ -15863,6 +16099,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId: number
     artworks?: ArtworkUncheckedCreateNestedManyWithoutAuthorInput
     comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
@@ -15882,6 +16121,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role: RoleCreateNestedOneWithoutUsersInput
     artworks?: ArtworkCreateNestedManyWithoutAuthorInput
     comments?: CommentCreateNestedManyWithoutAuthorInput
@@ -15897,6 +16139,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId: number
     artworks?: ArtworkUncheckedCreateNestedManyWithoutAuthorInput
     comments?: CommentUncheckedCreateNestedManyWithoutAuthorInput
@@ -15927,6 +16172,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     artworks?: ArtworkUpdateManyWithoutAuthorNestedInput
     comments?: CommentUpdateManyWithoutAuthorNestedInput
@@ -15942,6 +16190,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId?: IntFieldUpdateOperationsInput | number
     artworks?: ArtworkUncheckedUpdateManyWithoutAuthorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
@@ -15967,6 +16218,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     artworks?: ArtworkUpdateManyWithoutAuthorNestedInput
     comments?: CommentUpdateManyWithoutAuthorNestedInput
@@ -15982,6 +16236,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     roleId?: IntFieldUpdateOperationsInput | number
     artworks?: ArtworkUncheckedUpdateManyWithoutAuthorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
@@ -16145,6 +16402,9 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    coverPhotoUrl?: string | null
+    bio?: string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUpdateWithoutRoleInput = {
@@ -16154,6 +16414,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     artworks?: ArtworkUpdateManyWithoutAuthorNestedInput
     comments?: CommentUpdateManyWithoutAuthorNestedInput
     reactions?: ReactionUpdateManyWithoutUserNestedInput
@@ -16169,6 +16432,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
     artworks?: ArtworkUncheckedUpdateManyWithoutAuthorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutAuthorNestedInput
     reactions?: ReactionUncheckedUpdateManyWithoutUserNestedInput
@@ -16184,6 +16450,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ArtworkHashtagCreateManyArtworkInput = {

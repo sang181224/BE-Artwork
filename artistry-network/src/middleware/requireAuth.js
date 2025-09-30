@@ -8,7 +8,6 @@ function requireAuth(req, res, next) {
     try {
         const decoded = jwt.verify(token, 'sang181224');
         req.user = decoded;
-        console.log("req user: ", req.user)
         next();
     } catch (error) {
         console.error('Error during token verification: ', error);

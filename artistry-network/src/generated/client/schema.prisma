@@ -11,16 +11,18 @@ datasource db {
 // ===== AUTH & USER MODELS =====
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  avatarUrl String?  @db.Text
-  phone     String?  @unique
-  email     String   @unique
-  password  String   @db.Text
-  createdAt DateTime @default(now())
-
-  roleId Int
-  role   Role @relation(fields: [roleId], references: [id])
+  id            Int      @id @default(autoincrement())
+  name          String
+  avatarUrl     String?  @db.Text
+  phone         String?  @unique
+  email         String   @unique
+  password      String   @db.Text
+  createdAt     DateTime @default(now())
+  coverPhotoUrl String?  @db.Text // Ảnh bìa
+  bio           String?  @db.Text
+  skills        Json?
+  roleId        Int
+  role          Role     @relation(fields: [roleId], references: [id])
 
   // Relations
   artworks  Artwork[]
@@ -48,7 +50,7 @@ model Artwork {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   dimensions  String?
-  imageUrls   String
+  imageUrls   String           @db.Text
   authorId    Int
   author      User             @relation(fields: [authorId], references: [id])
   categoryId  Int

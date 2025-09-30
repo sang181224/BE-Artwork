@@ -131,10 +131,94 @@ const updateMemberById = async (req, res) => {
         return res.status(500).json({ message: "Đã xảy ra lỗi khi cập nhật người dùng" });
     }
 }
+//Láy thông tin user cơ bản
+const getProfile = async (req, res) => {
+    try {
+        const profileId = req.params.id;
+        const loggedInUserId = req.user ? req.user.userId : null;
+
+        const profile = await userModel.findBasicProfileById(profileId);
+
+        if (!profile) {
+            return res.status(404).json({ message: 'Không tìm thấy hồ sơ người dùng.' });
+        }
+
+        const isOwner = loggedInUserId === profile.id;
+
+        res.status(200).json({
+            isOwner,
+            profile
+        });
+    } catch (error) {
+        console.error("Lỗi khi lấy thông tin profile:", error);
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
+//thống kê dữ liệu số folloew, số tác phẩm đã duyệt, số người theo dõi
+const getProfileStats = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const stats = await userModel.getStatsById(id);
+        res.status(200).json(stats);
+    } catch (error) {
+        console.error("Lỗi khi lấy thông tin stats:", error);
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
+// HÀM MỚI: Lấy tác phẩm công khai cho tab tác phẩm
+const getProfileArtworks = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const artworks = await userModel.findApprovedArtworksByAuthor(id);
+        res.status(200).json(artworks);
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
+
+// HÀM MỚI: Lấy các bài đăng cần quản lý cho tab 'Quản lý bài đăng'
+const getProfileDrafts = async (req, res) => {
+    try {
+        const profileId = req.params.id;
+        const loggedInUserId = req.user.userId;
+        if (loggedInUserId !== parseInt(profileId)) {
+            return res.status(403).json({ message: "Không có quyền truy cập." });
+        }
+
+        const drafts = await userModel.findNonPublicArtworksByAuthor(profileId);
+        res.status(200).json(drafts);
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
+const follow = async (req, res) => {
+    try {
+        const followerId = req.user.userId; // ID của người đi theo dõi (lấy từ token)
+        const followingId = parseInt(req.params.id); // ID của người được theo dõi (lấy từ URL)
+
+        if (followerId === followingId) {
+            return res.status(400).json({ message: "Bạn không thể tự theo dõi chính mình." });
+        }
+
+        await userModel.followUser(followerId, followingId);
+        res.status(200).json({ message: "Theo dõi thành công." });
+    } catch (error) {
+        // Bắt lỗi nếu đã theo dõi rồi
+        if (error.code === 'P2002') {
+            return res.status(409).json({ message: "Bạn đã theo dõi người này rồi." });
+        }
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
 module.exports = {
     createMember,
     upload,
     loginMember,
     getMemberById,
-    updateMemberById
+    updateMemberById,
+    getProfile,
+    follow,
+    getProfileStats,
+    getProfileArtworks,
+    getProfileDrafts
 }
