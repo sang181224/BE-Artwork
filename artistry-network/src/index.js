@@ -4,7 +4,7 @@ const path = require('path')
 const { PrismaClient } = require('./generated/client');
 const app = express();
 const prisma = new PrismaClient;
-const port = 3000;
+const port = 3001;
 
 app.use(cors());
 //   Xử lý JSON data

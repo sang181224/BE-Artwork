@@ -30,6 +30,10 @@ model User {
     reactions Reaction[]
     following Follows[]  @relation("Following") // Danh sách những người mình theo dõi
     followers Follows[]  @relation("Followers")
+
+    // Messages
+    sentMessages     Message[] @relation("SentMessages")
+    receivedMessages Message[] @relation("ReceivedMessages")
 }
 
 model Role {
@@ -125,4 +129,18 @@ model Follows {
     following   User @relation("Followers", fields: [followingId], references: [id])
 
     @@id([followerId, followingId])
+}
+
+model Message {
+  id          Int      @id @default(autoincrement())
+  content     String   @db.Text
+  createdAt   DateTime @default(now())
+  senderId    Int
+  receiverId  Int
+  read        Boolean  @default(false)
+
+  sender    User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver  User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([senderId, receiverId])
 }

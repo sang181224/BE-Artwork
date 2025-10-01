@@ -2,6 +2,7 @@ const express = require('express');
 const userController = require('../controller/userController');
 const artworkController = require('../controller/artworkController');
 const categoryController = require('../controller/categoryController');
+const messageController = require('../controller/messageController');
 const requireAuth = require('../middleware/requireAuth');
 const optionalAuth = require('../middleware/optionalAuth');
 const requireAdmin = require('../middleware/requireAdmin');
@@ -43,4 +44,10 @@ router.get('/admin/artworks/pending', requireAuth, requireAdmin, artworkControll
 router.put('/admin/artworks/approve/:id', requireAuth, requireAdmin, artworkController.approveArtwork);
 //api từ chối tác phẩm
 router.put('/admin/artworks/reject/:id', requireAuth, requireAdmin, artworkController.rejectArtwork);
+
+// Chat (Messages) & Pusher Auth
+router.post('/messages', requireAuth, messageController.sendMessage);
+router.get('/messages/:otherUserId', requireAuth, messageController.getMessages);
+router.post('/pusher/auth', requireAuth, messageController.authPusher);
+
 module.exports = router;
