@@ -139,15 +139,15 @@ const getStatsById = async (id) => {
 
     const [artworkCount, followersCount, followingCount] = await Promise.all([
         // Đếm số tác phẩm đã duyệt
-        prisma.artwork.count({ 
-            where: { authorId: userId, status: 'approved' } 
+        prisma.artwork.count({
+            where: { authorId: userId, status: 'approved' }
         }),
         // Đếm số người theo dõi mình
-        prisma.follows.count({ 
-            where: { followingId: userId } 
+        prisma.follows.count({
+            where: { followingId: userId }
         }),
         // Đếm số người mình đang theo dõi
-        prisma.follows.count({ 
+        prisma.follows.count({
             where: { followerId: userId }
         })
     ]);
@@ -169,12 +169,12 @@ const followUser = (followerId, followingId) => {
 //lấy tác phẩm đã được duyệt
 const findApprovedArtworksByAuthor = (authorId) => {
     return prisma.artwork.findMany({
-        where: { 
-            authorId: parseInt(authorId), 
-            status: 'approved' 
+        where: {
+            authorId: parseInt(authorId),
+            status: 'approved'
         },
         orderBy: { createdAt: 'desc' },
-        
+
         include: {
             author: {
                 select: {
@@ -182,13 +182,19 @@ const findApprovedArtworksByAuthor = (authorId) => {
                     name: true,
                     avatarUrl: true
                 }
+            },
+            _count: {
+                select: {
+                    reactions: true, // Đếm số lượng reactions
+                    comments: true   // Đếm số lượng comments
+                }
             }
         }
     });
 };
 const findNonPublicArtworksByAuthor = (authorId) => {
-     return prisma.artwork.findMany({
-        where: { 
+    return prisma.artwork.findMany({
+        where: {
             authorId: parseInt(authorId),
             status: { in: ['draft', 'pending', 'rejected'] }
         },

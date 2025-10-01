@@ -37,7 +37,7 @@ const createMember = async (req, res) => {
             }
             return res.status(400).json(errorsEmail);
         }
-        data.roleId = 1;
+        data.roleId = 2;
         data.avatar = avatarFile ? avatarFile.path : '';
         //Mã hoá pass
         data.password = await bcryptjs.hash(data.password, 10);

@@ -2,6 +2,7 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const prisma = require('../generated/client')
 const validateArtwork = require('../validation/validateArtwork');
 const artworkModel = require('../model/artworkModel');
 
@@ -80,6 +81,25 @@ const createArtwork = async (req, res) => {
     }
 };
 
+//tìm tác phẩm nổi bật
+const getFeaturedArtworks = async (req, res) => {
+    try {
+        const artworks = await artworkModel.findFeatured();
+        res.status(200).json(artworks);
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
+
+//tìm tác phẩm mới nhất
+const getLatestArtworks = async (req, res) => {
+    try {
+        const artworks = await artworkModel.findLatest();
+        res.status(200).json(artworks);
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
 //admin
 // Lấy danh sách các tác phẩm đang chờ duyệt
 const getPendingArtworks = async (req, res) => {
@@ -102,7 +122,7 @@ const approveArtwork = async (req, res) => {
 };
 // Từ chối một tác phẩm
 const rejectArtwork = async (req, res) => {
-     try {
+    try {
         const { id } = req.params;
         await artworkModel.updateStatus(id, 'rejected');
         res.status(200).json({ message: "Tác phẩm đã bị từ chối." });
@@ -110,12 +130,56 @@ const rejectArtwork = async (req, res) => {
         res.status(500).json({ message: "Lỗi server." });
     }
 };
+// Xử lý việc thêm/sửa reaction
+const handleReaction = async (req, res) => {
+    try {
+        const artworkId = req.params.id;
+        const userId = req.user.userId;
+        const { reactionType } = req.body; // vd: 'like', 'love'
+
+        // Tìm ID của loại reaction từ tên
+        const reactionTypeRecord = await prisma.reactionType.findUnique({
+            where: { name: reactionType }
+        });
+
+        if (!reactionTypeRecord) {
+            return res.status(400).json({ message: "Loại reaction không hợp lệ." });
+        }
+
+        await artworkModel.upsertReaction(userId, artworkId, reactionTypeRecord.id);
+        res.status(200).json({ message: "Cập nhật cảm xúc thành công." });
+
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
+
+// Xử lý việc bỏ reaction
+const removeReaction = async (req, res) => {
+    try {
+        const artworkId = req.params.id;
+        const userId = req.user.userId;
+
+        await artworkModel.deleteReaction(userId, artworkId);
+        res.status(200).json({ message: "Đã bỏ cảm xúc." });
+    } catch (error) {
+        // Bắt lỗi nếu người dùng cố xóa reaction không tồn tại
+        if (error.code === 'P2025') {
+            return res.status(404).json({ message: "Bạn chưa có cảm xúc nào với tác phẩm này." });
+        }
+        res.status(500).json({ message: "Lỗi server." });
+    }
+};
 module.exports = {
     upload,
     getApprovedArtworks,
     getArtworkById,
+    getLatestArtworks,
+    getFeaturedArtworks,
     createArtwork,
     getPendingArtworks,
     approveArtwork,
-    rejectArtwork
+    rejectArtwork,
+    handleReaction,
+    removeReaction
 };

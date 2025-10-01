@@ -22,8 +22,10 @@ router.get('/profiles/:id/drafts', requireAuth, userController.getProfileDrafts)
 
 
 //artwork
-router.get('/artwork', artworkController.getApprovedArtworks);
-router.get('/artwork/:id', artworkController.getArtworkById);
+router.get('/artwork', artworkController.getApprovedArtworks);//lấy tác phẩm đã được duyệt của all
+router.get('/artwork/detail/:id', artworkController.getArtworkById);//lấy chi tiết tác phẩm
+router.get('/artwork/featured', artworkController.getFeaturedArtworks);
+router.get('/artwork/latest', artworkController.getLatestArtworks)
 // Route cần đăng nhập
 router.post('/artwork/add', requireAuth, artworkController.upload, artworkController.createArtwork);
 
@@ -34,11 +36,11 @@ router.put('/admin/category/edit/:id', requireAuth, requireAdmin, categoryContro
 router.delete('/admin/category/delete/:id', requireAuth, requireAdmin, categoryController.deleteCategory);
 router.get('/admin/category/list', categoryController.getCategoryList);
 
-//artwork
+//artwork profile
 //api lấy danh sách tác phẩm đang chờ duyệt
 router.get('/admin/artworks/pending', requireAuth, requireAdmin, artworkController.getPendingArtworks);
 //api duyệt tác phẩm
-router.put('/admin/artworks/approve', requireAuth, requireAdmin, artworkController.approveArtwork);
+router.put('/admin/artworks/approve/:id', requireAuth, requireAdmin, artworkController.approveArtwork);
 //api từ chối tác phẩm
-router.put('/admin/artworks/reject', requireAuth, requireAdmin, artworkController.rejectArtwork);
+router.put('/admin/artworks/reject/:id', requireAuth, requireAdmin, artworkController.rejectArtwork);
 module.exports = router;
