@@ -197,6 +197,15 @@ exports.Prisma.FollowsScalarFieldEnum = {
   followingId: 'followingId'
 };
 
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  senderId: 'senderId',
+  receiverId: 'receiverId',
+  read: 'read'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -263,6 +272,10 @@ exports.Prisma.ReactionTypeOrderByRelevanceFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.MessageOrderByRelevanceFieldEnum = {
+  content: 'content'
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
@@ -274,7 +287,8 @@ exports.Prisma.ModelName = {
   Comment: 'Comment',
   ReactionType: 'ReactionType',
   Reaction: 'Reaction',
-  Follows: 'Follows'
+  Follows: 'Follows',
+  Message: 'Message'
 };
 
 /**
