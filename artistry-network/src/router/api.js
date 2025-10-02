@@ -52,7 +52,9 @@ router.put('/admin/artworks/reject/:id', requireAuth, requireAdmin, artworkContr
 
 // Chat (Messages) & Pusher Auth
 router.post('/messages', requireAuth, messageController.sendMessage);
+// lấy lịch sử cuộc trò chuyện giữa hai người dùng
 router.get('/messages/:otherUserId', requireAuth, messageController.getMessages);
+// xác thực Pusher để sử dụng kênh private hoặc presence
 router.post('/pusher/auth', requireAuth, messageController.authPusher);
 
 module.exports = router;

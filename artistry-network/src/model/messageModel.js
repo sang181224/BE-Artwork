@@ -1,6 +1,7 @@
 const { PrismaClient } = require('../generated/client');
 const prisma = new PrismaClient();
 
+// Tạo tin nhắn mới 
 const createMessage = (data) => {
     return prisma.message.create({
         data: {
@@ -15,6 +16,7 @@ const createMessage = (data) => {
     });
 };
 
+// Lấy lịch sử cuộc trò chuyện giữa hai người dùng
 const getConversation = (userId1, userId2) => {
     return prisma.message.findMany({
         where: {

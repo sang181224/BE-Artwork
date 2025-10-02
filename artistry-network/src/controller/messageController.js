@@ -4,6 +4,7 @@ const pusher = require('../config/pusher');
 // Gửi tin nhắn mới
 const sendMessage = async (req, res) => {
     try {
+        // Lấy thông tin người gửi từ token đã xác thực (trong middleware requireAuth) và thông tin người nhận, nội dung từ body
         const senderId = req.user.userId;
         const { receiverId, content } = req.body;
 
@@ -11,6 +12,7 @@ const sendMessage = async (req, res) => {
             return res.status(400).json({ message: "Thiếu thông tin người nhận hoặc nội dung." });
         }
 
+        // Tạo tin nhắn trong DB và lấy thông tin người gửi, người nhận để gửi qua Pusher 
         const messageData = { senderId, receiverId: parseInt(receiverId), content };
         const newMessage = await messageModel.createMessage(messageData);
 
@@ -19,6 +21,7 @@ const sendMessage = async (req, res) => {
         const ids = [senderId, parseInt(receiverId)].sort((a, b) => a - b);
         const channelName = `private-chat-${ids[0]}-${ids[1]}`;
 
+        // gửi tin nhắn mới đến kênh đúng 
         await pusher.trigger(channelName, 'new-message', {
             message: newMessage
         });
@@ -36,7 +39,8 @@ const getMessages = async (req, res) => {
         const userId1 = req.user.userId;
         const userId2 = parseInt(req.params.otherUserId);
 
-        const conversation = await messageModel.getConversation(userId1, userId2);
+        // Lấy lịch sử cuộc trò chuyện giữa hai người dùng
+        const conversation = await messageModel.getConversation(userId1, userId2); 
         res.status(200).json(conversation);
     } catch (error) {
         console.error("Lỗi khi lấy lịch sử chat:", error);
@@ -53,13 +57,14 @@ const authPusher = async (req, res) => {
 
         // Logic xác thực: chỉ cho phép user đăng ký kênh mà họ là thành viên
         const channelParts = channel.split('-');
-        const isMember = channelParts.includes(userId.toString());
+        // Kiểm tra userId có trong tên kênh không
+        const isMember = channelParts.includes(userId.toString()); 
 
         if (!isMember) {
             return res.status(403).send('Forbidden');
         }
 
-        // For presence channels, you must provide user_info
+        // Dữ liệu presence channel (nếu dùng kênh presence)
         const presenceData = {
             user_id: userId.toString(),
             user_info: {
@@ -67,7 +72,7 @@ const authPusher = async (req, res) => {
             },
         };
 
-        const auth = pusher.authorizeChannel(socketId, channel, presenceData);
+        const auth = pusher.authorizeChannel(socketId, channel, presenceData); // Xác thực kênh với dữ liệu presence 
         res.send(auth);
     } catch (error) {
         console.error("Lỗi khi xác thực Pusher:", error);
