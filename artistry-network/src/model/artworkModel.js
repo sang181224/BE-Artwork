@@ -65,6 +65,7 @@ const findById = (id, loggedInUserId) => {
                     email: true
                 }
             },
+            comments: true,
             _count: {
                 select: {
                     reactions: true, // Đếm số lượng reactions
