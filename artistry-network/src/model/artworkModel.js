@@ -11,7 +11,7 @@ const prisma = new PrismaClient();
 //         }
 //     });
 // };
-const findAllApproved = () => {
+const findAllApproved = (loggedInUserId) => {
     return prisma.artwork.findMany({
         where: { status: 'approved' },
         orderBy: { createdAt: 'desc' },
@@ -28,12 +28,17 @@ const findAllApproved = () => {
                     reactions: true, // Đếm số lượng reactions
                     comments: true   // Đếm số lượng comments
                 }
+            },
+            reactions: {
+                // Chỉ lấy reaction của user này
+                where: { userId: loggedInUserId || -1 }, // Dùng -1 để không bao giờ khớp nếu user là khách
+                include: { reactionType: true } // Lấy cả tên của reaction
             }
         }
     });
 };
 
-const findById = (id) => {
+const findById = (id, loggedInUserId) => {
     return prisma.artwork.findUnique({
         where: { id: parseInt(id), status: 'approved' },
         include: {
@@ -50,6 +55,11 @@ const findById = (id) => {
                     reactions: true, // Đếm số lượng reactions
                     comments: true   // Đếm số lượng comments
                 }
+            },
+            reactions: {
+                // Chỉ lấy reaction của user này
+                where: { userId: loggedInUserId || -1 }, // Dùng -1 để không bao giờ khớp nếu user là khách
+                include: { reactionType: true } // Lấy cả tên của reaction
             }
         }
     });
@@ -82,6 +92,11 @@ const findFeatured = () => {
             author: { select: { id: true, name: true, avatarUrl: true } },
             _count: {
                 select: { reactions: true, comments: true }
+            },
+            reactions: {
+                // Chỉ lấy reaction của user này
+                where: { userId: loggedInUserId || -1 }, // Dùng -1 để không bao giờ khớp nếu user là khách
+                include: { reactionType: true } // Lấy cả tên của reaction
             }
         }
     });
@@ -97,6 +112,11 @@ const findLatest = () => {
             author: { select: { id: true, name: true, avatarUrl: true } },
             _count: { // <<< BỔ SUNG
                 select: { reactions: true, comments: true }
+            },
+            reactions: {
+                // Chỉ lấy reaction của user này
+                where: { userId: loggedInUserId || -1 }, // Dùng -1 để không bao giờ khớp nếu user là khách
+                include: { reactionType: true } // Lấy cả tên của reaction
             }
         }
     });
@@ -119,6 +139,24 @@ const updateStatus = (id, status) => {
         data: { status }
     });
 };
+
+
+//Tăng lượt xem
+const incrementViewCount = (id) => {
+    return prisma.artwork.update({
+        where: { id: parseInt(id) },
+        data: {
+            views: {
+                increment: 1 // hàm có sẵn của Prisma để tăng giá trị
+            }
+        }
+    });
+};
+
+//kiểm tra xem loại reaction này có trong database không
+const findReaction = (nameReaction) => {
+    return prisma.reactionType.findUnique({ where: { name: nameReaction } })
+}
 // Thêm hoặc cập nhật một reaction
 const upsertReaction = (userId, artworkId, reactionTypeId) => {
     return prisma.reaction.upsert({
@@ -161,5 +199,7 @@ module.exports = {
     findByStatus,
     updateStatus,
     upsertReaction,
-    deleteReaction
+    deleteReaction,
+    findReaction,
+    incrementViewCount
 };

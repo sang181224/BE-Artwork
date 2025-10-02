@@ -15,17 +15,22 @@ router.post('/login', userController.loginMember);
 router.get('/profiles/:id', optionalAuth, userController.getProfile);
 router.post('/:id/follow', requireAuth, userController.follow); //theo dõi, bỏ theo dõi
 router.get('/profiles/:id/stats', userController.getProfileStats);
-router.get('/profiles/:id/artworks', userController.getProfileArtworks);//Lấy các tác phẩm trong trong profile 
+router.get('/profiles/:id/artworks', optionalAuth, userController.getProfileArtworks);//Lấy các tác phẩm trong trong profile 
 router.get('/profiles/:id/drafts', requireAuth, userController.getProfileDrafts); //lấy các tác phẩm ở trạng thái nháp, chờ duyệt
 
 //follow
 
 
 //artwork
-router.get('/artwork', artworkController.getApprovedArtworks);//lấy tác phẩm đã được duyệt của all
-router.get('/artwork/detail/:id', artworkController.getArtworkById);//lấy chi tiết tác phẩm
-router.get('/artwork/featured', artworkController.getFeaturedArtworks);
-router.get('/artwork/latest', artworkController.getLatestArtworks)
+router.get('/artwork', optionalAuth, artworkController.getApprovedArtworks);//lấy tác phẩm đã được duyệt của all
+router.get('/artwork/detail/:id', optionalAuth, artworkController.getArtworkById);//lấy chi tiết tác phẩm
+router.get('/artwork/featured', optionalAuth, artworkController.getFeaturedArtworks);//lấy tác phẩm nổi bật
+router.get('/artwork/latest', optionalAuth,artworkController.getLatestArtworks);//lấy tác phẩm mới nhất
+router.post('/artwork/:id/view',artworkController.handleViewCount);//tăng lượt xem
+//artwork reaction
+router.post('/artwork/:id/react', requireAuth, artworkController.handleReaction);
+router.delete('/artwork/:id/react', requireAuth, artworkController.removeReaction);
+
 // Route cần đăng nhập
 router.post('/artwork/add', requireAuth, artworkController.upload, artworkController.createArtwork);
 

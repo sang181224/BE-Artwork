@@ -3991,6 +3991,7 @@ export namespace Prisma {
   export type ArtworkAvgAggregateOutputType = {
     id: number | null
     price: number | null
+    views: number | null
     authorId: number | null
     categoryId: number | null
   }
@@ -3998,6 +3999,7 @@ export namespace Prisma {
   export type ArtworkSumAggregateOutputType = {
     id: number | null
     price: number | null
+    views: number | null
     authorId: number | null
     categoryId: number | null
   }
@@ -4012,6 +4014,7 @@ export namespace Prisma {
     updatedAt: Date | null
     dimensions: string | null
     imageUrls: string | null
+    views: number | null
     authorId: number | null
     categoryId: number | null
   }
@@ -4026,6 +4029,7 @@ export namespace Prisma {
     updatedAt: Date | null
     dimensions: string | null
     imageUrls: string | null
+    views: number | null
     authorId: number | null
     categoryId: number | null
   }
@@ -4040,6 +4044,7 @@ export namespace Prisma {
     updatedAt: number
     dimensions: number
     imageUrls: number
+    views: number
     authorId: number
     categoryId: number
     _all: number
@@ -4049,6 +4054,7 @@ export namespace Prisma {
   export type ArtworkAvgAggregateInputType = {
     id?: true
     price?: true
+    views?: true
     authorId?: true
     categoryId?: true
   }
@@ -4056,6 +4062,7 @@ export namespace Prisma {
   export type ArtworkSumAggregateInputType = {
     id?: true
     price?: true
+    views?: true
     authorId?: true
     categoryId?: true
   }
@@ -4070,6 +4077,7 @@ export namespace Prisma {
     updatedAt?: true
     dimensions?: true
     imageUrls?: true
+    views?: true
     authorId?: true
     categoryId?: true
   }
@@ -4084,6 +4092,7 @@ export namespace Prisma {
     updatedAt?: true
     dimensions?: true
     imageUrls?: true
+    views?: true
     authorId?: true
     categoryId?: true
   }
@@ -4098,6 +4107,7 @@ export namespace Prisma {
     updatedAt?: true
     dimensions?: true
     imageUrls?: true
+    views?: true
     authorId?: true
     categoryId?: true
     _all?: true
@@ -4199,6 +4209,7 @@ export namespace Prisma {
     updatedAt: Date
     dimensions: string | null
     imageUrls: string
+    views: number
     authorId: number
     categoryId: number
     _count: ArtworkCountAggregateOutputType | null
@@ -4232,6 +4243,7 @@ export namespace Prisma {
     updatedAt?: boolean
     dimensions?: boolean
     imageUrls?: boolean
+    views?: boolean
     authorId?: boolean
     categoryId?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
@@ -4254,11 +4266,12 @@ export namespace Prisma {
     updatedAt?: boolean
     dimensions?: boolean
     imageUrls?: boolean
+    views?: boolean
     authorId?: boolean
     categoryId?: boolean
   }
 
-  export type ArtworkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "price" | "status" | "createdAt" | "updatedAt" | "dimensions" | "imageUrls" | "authorId" | "categoryId", ExtArgs["result"]["artwork"]>
+  export type ArtworkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "price" | "status" | "createdAt" | "updatedAt" | "dimensions" | "imageUrls" | "views" | "authorId" | "categoryId", ExtArgs["result"]["artwork"]>
   export type ArtworkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -4287,6 +4300,7 @@ export namespace Prisma {
       updatedAt: Date
       dimensions: string | null
       imageUrls: string
+      views: number
       authorId: number
       categoryId: number
     }, ExtArgs["result"]["artwork"]>
@@ -4672,6 +4686,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Artwork", 'DateTime'>
     readonly dimensions: FieldRef<"Artwork", 'String'>
     readonly imageUrls: FieldRef<"Artwork", 'String'>
+    readonly views: FieldRef<"Artwork", 'Int'>
     readonly authorId: FieldRef<"Artwork", 'Int'>
     readonly categoryId: FieldRef<"Artwork", 'Int'>
   }
@@ -11870,6 +11885,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     dimensions: 'dimensions',
     imageUrls: 'imageUrls',
+    views: 'views',
     authorId: 'authorId',
     categoryId: 'categoryId'
   };
@@ -12256,6 +12272,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Artwork"> | Date | string
     dimensions?: StringNullableFilter<"Artwork"> | string | null
     imageUrls?: StringFilter<"Artwork"> | string
+    views?: IntFilter<"Artwork"> | number
     authorId?: IntFilter<"Artwork"> | number
     categoryId?: IntFilter<"Artwork"> | number
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -12275,6 +12292,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     dimensions?: SortOrderInput | SortOrder
     imageUrls?: SortOrder
+    views?: SortOrder
     authorId?: SortOrder
     categoryId?: SortOrder
     author?: UserOrderByWithRelationInput
@@ -12298,6 +12316,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Artwork"> | Date | string
     dimensions?: StringNullableFilter<"Artwork"> | string | null
     imageUrls?: StringFilter<"Artwork"> | string
+    views?: IntFilter<"Artwork"> | number
     authorId?: IntFilter<"Artwork"> | number
     categoryId?: IntFilter<"Artwork"> | number
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -12317,6 +12336,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     dimensions?: SortOrderInput | SortOrder
     imageUrls?: SortOrder
+    views?: SortOrder
     authorId?: SortOrder
     categoryId?: SortOrder
     _count?: ArtworkCountOrderByAggregateInput
@@ -12339,6 +12359,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Artwork"> | Date | string
     dimensions?: StringNullableWithAggregatesFilter<"Artwork"> | string | null
     imageUrls?: StringWithAggregatesFilter<"Artwork"> | string
+    views?: IntWithAggregatesFilter<"Artwork"> | number
     authorId?: IntWithAggregatesFilter<"Artwork"> | number
     categoryId?: IntWithAggregatesFilter<"Artwork"> | number
   }
@@ -12860,6 +12881,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     author: UserCreateNestedOneWithoutArtworksInput
     category: CategoryCreateNestedOneWithoutArtworksInput
     hashtags?: ArtworkHashtagCreateNestedManyWithoutArtworkInput
@@ -12877,6 +12899,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     authorId: number
     categoryId: number
     hashtags?: ArtworkHashtagUncheckedCreateNestedManyWithoutArtworkInput
@@ -12893,6 +12916,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     author?: UserUpdateOneRequiredWithoutArtworksNestedInput
     category?: CategoryUpdateOneRequiredWithoutArtworksNestedInput
     hashtags?: ArtworkHashtagUpdateManyWithoutArtworkNestedInput
@@ -12910,6 +12934,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
     hashtags?: ArtworkHashtagUncheckedUpdateManyWithoutArtworkNestedInput
@@ -12927,6 +12952,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     authorId: number
     categoryId: number
   }
@@ -12940,6 +12966,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
   }
 
   export type ArtworkUncheckedUpdateManyInput = {
@@ -12952,6 +12979,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
   }
@@ -13605,6 +13633,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     dimensions?: SortOrder
     imageUrls?: SortOrder
+    views?: SortOrder
     authorId?: SortOrder
     categoryId?: SortOrder
   }
@@ -13612,6 +13641,7 @@ export namespace Prisma {
   export type ArtworkAvgOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
+    views?: SortOrder
     authorId?: SortOrder
     categoryId?: SortOrder
   }
@@ -13626,6 +13656,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     dimensions?: SortOrder
     imageUrls?: SortOrder
+    views?: SortOrder
     authorId?: SortOrder
     categoryId?: SortOrder
   }
@@ -13640,6 +13671,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     dimensions?: SortOrder
     imageUrls?: SortOrder
+    views?: SortOrder
     authorId?: SortOrder
     categoryId?: SortOrder
   }
@@ -13647,6 +13679,7 @@ export namespace Prisma {
   export type ArtworkSumOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
+    views?: SortOrder
     authorId?: SortOrder
     categoryId?: SortOrder
   }
@@ -14883,6 +14916,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     category: CategoryCreateNestedOneWithoutArtworksInput
     hashtags?: ArtworkHashtagCreateNestedManyWithoutArtworkInput
     reactions?: ReactionCreateNestedManyWithoutArtworkInput
@@ -14899,6 +14933,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     categoryId: number
     hashtags?: ArtworkHashtagUncheckedCreateNestedManyWithoutArtworkInput
     reactions?: ReactionUncheckedCreateNestedManyWithoutArtworkInput
@@ -15051,6 +15086,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Artwork"> | Date | string
     dimensions?: StringNullableFilter<"Artwork"> | string | null
     imageUrls?: StringFilter<"Artwork"> | string
+    views?: IntFilter<"Artwork"> | number
     authorId?: IntFilter<"Artwork"> | number
     categoryId?: IntFilter<"Artwork"> | number
   }
@@ -15480,6 +15516,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     author: UserCreateNestedOneWithoutArtworksInput
     hashtags?: ArtworkHashtagCreateNestedManyWithoutArtworkInput
     reactions?: ReactionCreateNestedManyWithoutArtworkInput
@@ -15496,6 +15533,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     authorId: number
     hashtags?: ArtworkHashtagUncheckedCreateNestedManyWithoutArtworkInput
     reactions?: ReactionUncheckedCreateNestedManyWithoutArtworkInput
@@ -15571,6 +15609,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     author: UserCreateNestedOneWithoutArtworksInput
     category: CategoryCreateNestedOneWithoutArtworksInput
     reactions?: ReactionCreateNestedManyWithoutArtworkInput
@@ -15587,6 +15626,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     authorId: number
     categoryId: number
     reactions?: ReactionUncheckedCreateNestedManyWithoutArtworkInput
@@ -15632,6 +15672,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     author?: UserUpdateOneRequiredWithoutArtworksNestedInput
     category?: CategoryUpdateOneRequiredWithoutArtworksNestedInput
     reactions?: ReactionUpdateManyWithoutArtworkNestedInput
@@ -15648,6 +15689,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
     reactions?: ReactionUncheckedUpdateManyWithoutArtworkNestedInput
@@ -15723,6 +15765,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     author: UserCreateNestedOneWithoutArtworksInput
     category: CategoryCreateNestedOneWithoutArtworksInput
     hashtags?: ArtworkHashtagCreateNestedManyWithoutArtworkInput
@@ -15739,6 +15782,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     authorId: number
     categoryId: number
     hashtags?: ArtworkHashtagUncheckedCreateNestedManyWithoutArtworkInput
@@ -15816,6 +15860,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     author?: UserUpdateOneRequiredWithoutArtworksNestedInput
     category?: CategoryUpdateOneRequiredWithoutArtworksNestedInput
     hashtags?: ArtworkHashtagUpdateManyWithoutArtworkNestedInput
@@ -15832,6 +15877,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
     hashtags?: ArtworkHashtagUncheckedUpdateManyWithoutArtworkNestedInput
@@ -15925,6 +15971,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     author: UserCreateNestedOneWithoutArtworksInput
     category: CategoryCreateNestedOneWithoutArtworksInput
     hashtags?: ArtworkHashtagCreateNestedManyWithoutArtworkInput
@@ -15941,6 +15988,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     authorId: number
     categoryId: number
     hashtags?: ArtworkHashtagUncheckedCreateNestedManyWithoutArtworkInput
@@ -16032,6 +16080,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     author?: UserUpdateOneRequiredWithoutArtworksNestedInput
     category?: CategoryUpdateOneRequiredWithoutArtworksNestedInput
     hashtags?: ArtworkHashtagUpdateManyWithoutArtworkNestedInput
@@ -16048,6 +16097,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
     hashtags?: ArtworkHashtagUncheckedUpdateManyWithoutArtworkNestedInput
@@ -16256,6 +16306,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     categoryId: number
   }
 
@@ -16291,6 +16342,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     category?: CategoryUpdateOneRequiredWithoutArtworksNestedInput
     hashtags?: ArtworkHashtagUpdateManyWithoutArtworkNestedInput
     reactions?: ReactionUpdateManyWithoutArtworkNestedInput
@@ -16307,6 +16359,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
     hashtags?: ArtworkHashtagUncheckedUpdateManyWithoutArtworkNestedInput
     reactions?: ReactionUncheckedUpdateManyWithoutArtworkNestedInput
@@ -16323,6 +16376,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -16540,6 +16594,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dimensions?: string | null
     imageUrls: string
+    views?: number
     authorId: number
   }
 
@@ -16552,6 +16607,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     author?: UserUpdateOneRequiredWithoutArtworksNestedInput
     hashtags?: ArtworkHashtagUpdateManyWithoutArtworkNestedInput
     reactions?: ReactionUpdateManyWithoutArtworkNestedInput
@@ -16568,6 +16624,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
     hashtags?: ArtworkHashtagUncheckedUpdateManyWithoutArtworkNestedInput
     reactions?: ReactionUncheckedUpdateManyWithoutArtworkNestedInput
@@ -16584,6 +16641,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrls?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
   }
 

@@ -167,7 +167,7 @@ const followUser = (followerId, followingId) => {
     });
 };
 //lấy tác phẩm đã được duyệt
-const findApprovedArtworksByAuthor = (authorId) => {
+const findApprovedArtworksByAuthor = (authorId, loggedInUserId) => {
     return prisma.artwork.findMany({
         where: {
             authorId: parseInt(authorId),
@@ -188,6 +188,11 @@ const findApprovedArtworksByAuthor = (authorId) => {
                     reactions: true, // Đếm số lượng reactions
                     comments: true   // Đếm số lượng comments
                 }
+            },
+            reactions: {
+                // Chỉ lấy reaction của user này
+                where: { userId: loggedInUserId || -1 }, // Dùng -1 để không bao giờ khớp nếu user là khách
+                include: { reactionType: true } // Lấy cả tên của reaction
             }
         }
     });

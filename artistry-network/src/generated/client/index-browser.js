@@ -150,6 +150,7 @@ exports.Prisma.ArtworkScalarFieldEnum = {
   updatedAt: 'updatedAt',
   dimensions: 'dimensions',
   imageUrls: 'imageUrls',
+  views: 'views',
   authorId: 'authorId',
   categoryId: 'categoryId'
 };

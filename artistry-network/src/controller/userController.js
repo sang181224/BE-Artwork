@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const userModel = require('../model/userModel');
 const validateAccount = require('../validation/validateAccount');
+const { formatArtwork } = require('../utils/artworkFormatter');
 
 //Thiết lập multer để xử lý tệp hình ảnh
 const storage = multer.diskStorage({
@@ -168,9 +169,14 @@ const getProfileStats = async (req, res) => {
 // HÀM MỚI: Lấy tác phẩm công khai cho tab tác phẩm
 const getProfileArtworks = async (req, res) => {
     try {
+        // Lấy ID người dùng từ middleware (nếu có)
         const { id } = req.params;
-        const artworks = await userModel.findApprovedArtworksByAuthor(id);
-        res.status(200).json(artworks);
+        const loggedInUserId = req.user ? req.user.userId : null;
+        const artworks = await userModel.findApprovedArtworksByAuthor(id, loggedInUserId);
+
+        const responseData = artworks.map(art => formatArtwork(art));
+        
+        res.status(200).json(responseData);
     } catch (error) {
         res.status(500).json({ message: "Lỗi server." });
     }
