@@ -17,15 +17,44 @@ const storage = multer.diskStorage({
 });
 // const upload = multer({ storage });
 const upload = multer({ storage }).array('imageUrls', 5);
-// Lấy tất cả tác phẩm đã duyệt
+// Lấy tất cả tác phẩm đã duyệt 
+// const getApprovedArtworks = async (req, res) => {
+//     try {
+//         // Lấy ID người dùng từ middleware (nếu có)
+//         const loggedInUserId = req.user ? req.user.userId : null;
+//         const artworks = await artworkModel.findAllApproved(loggedInUserId);
+//         const responseData = artworks.map(art => formatArtwork(art));
+//         // Bạn có thể thêm logic để format dữ liệu ở đây nếu cần
+//         res.status(200).json(responseData);
+//     } catch (error) {
+//         res.status(500).json({ message: "Lỗi server khi lấy tác phẩm.", error: error.message });
+//     }
+// };
+
 const getApprovedArtworks = async (req, res) => {
     try {
-        // Lấy ID người dùng từ middleware (nếu có)
+        // Lấy các tham số từ query string, ví dụ: /artworks?page=2&sortBy=popular
+        const { page, sortBy, categoryId, minPrice, maxPrice } = req.query;
         const loggedInUserId = req.user ? req.user.userId : null;
-        const artworks = await artworkModel.findAllApproved(loggedInUserId);
+
+        // Gọi model với các tùy chọn
+        const { artworks, totalPages } = await artworkModel.findAll({ 
+            page, 
+            sortBy, 
+            categoryId,
+            minPrice,
+            maxPrice,
+            loggedInUserId 
+        });
+
+        // Định dạng lại dữ liệu trước khi gửi đi
         const responseData = artworks.map(art => formatArtwork(art));
-        // Bạn có thể thêm logic để format dữ liệu ở đây nếu cần
-        res.status(200).json(responseData);
+
+        res.status(200).json({
+            artworks: responseData,
+            totalPages: totalPages,
+            currentPage: parseInt(page) || 1
+        });
     } catch (error) {
         res.status(500).json({ message: "Lỗi server khi lấy tác phẩm.", error: error.message });
     }
@@ -94,7 +123,8 @@ const getFeaturedArtworks = async (req, res) => {
         // Lấy ID người dùng từ middleware (nếu có)
         const loggedInUserId = req.user ? req.user.userId : null;
         // console.log('userid ở controller: ', req.user);
-        const artworks = await artworkModel.findAllApproved(loggedInUserId);
+        const artworks = await artworkModel.findFeatured(loggedInUserId);
+        
         const responseData = artworks.map(art => formatArtwork(art));
         res.status(200).json(responseData);
     } catch (error) {
@@ -107,8 +137,7 @@ const getLatestArtworks = async (req, res) => {
     try {
         // Lấy ID người dùng từ middleware (nếu có)
         const loggedInUserId = req.user ? req.user.userId : null;
-        console.log(loggedInUserId);
-        const artworks = await artworkModel.findAllApproved(loggedInUserId);
+        const artworks = await artworkModel.findLatest(loggedInUserId);
         const responseData = artworks.map(art => formatArtwork(art));
         res.status(200).json(responseData);
     } catch (error) {
@@ -164,10 +193,8 @@ const handleReaction = async (req, res) => {
         const userId = req.user.userId;
 
         const { reactionType } = req.body; // vd: 'like', 'love'
-        console.log(reactionType);
         // Tìm ID của loại reaction từ tên
         const reactionTypeRecord = await artworkModel.findReaction(reactionType);
-        console.log(reactionTypeRecord);
         if (!reactionTypeRecord) {
             return res.status(400).json({ message: "Loại reaction không hợp lệ." });
         }

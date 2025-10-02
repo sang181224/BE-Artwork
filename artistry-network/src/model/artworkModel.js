@@ -2,40 +2,55 @@
 const { PrismaClient } = require('../generated/client');
 const prisma = new PrismaClient();
 
-// const findAllApproved = () => {
-//     return prisma.artwork.findMany({
-//         where: { status: 'approved' },
-//         orderBy: { createdAt: 'desc' },
-//         include: {
-//             author: { select: { id: true, name: true, avatarUrl: true } }
-//         }
-//     });
-// };
-const findAllApproved = (loggedInUserId) => {
-    return prisma.artwork.findMany({
-        where: { status: 'approved' },
-        orderBy: { createdAt: 'desc' },
-        include: {
-            author: {
-                select: {
-                    id: true,
-                    name: true,
-                    avatarUrl: true
-                }
-            },
-            _count: {
-                select: {
-                    reactions: true, // Đếm số lượng reactions
-                    comments: true   // Đếm số lượng comments
-                }
-            },
-            reactions: {
-                // Chỉ lấy reaction của user này
-                where: { userId: loggedInUserId || -1 }, // Dùng -1 để không bao giờ khớp nếu user là khách
-                include: { reactionType: true } // Lấy cả tên của reaction
-            }
+const PAGE_SIZE = 12; // Số lượng tác phẩm trên mỗi trang
+
+const findAll = async (options = {}) => {
+    const { page = 1, sortBy = 'newest', categoryId, minPrice, maxPrice, loggedInUserId } = options;
+
+    // --- Xây dựng các điều kiện truy vấn ---
+    const whereClause = { status: 'approved' };
+    if (categoryId) {
+        whereClause.categoryId = parseInt(categoryId);
+    }
+
+    // Thêm điều kiện lọc theo khoảng giá
+    if (minPrice || maxPrice) {
+        whereClause.price = {};
+        if (minPrice) {
+            whereClause.price.gte = parseFloat(minPrice); // gte = Greater than or equal
         }
-    });
+        if (maxPrice) {
+            whereClause.price.lte = parseFloat(maxPrice); // lte = Less than or equal
+        }
+    }
+    const orderByClause = (sortBy === 'popular') ? { reactions: { _count: 'desc' } } : { createdAt: 'desc' };
+    const skip = (parseInt(page) - 1) * PAGE_SIZE;
+    const take = PAGE_SIZE;
+
+    // --- Thực hiện 2 truy vấn song song để tối ưu ---
+    const [artworks, totalArtworks] = await prisma.$transaction([
+        // 1. Lấy danh sách tác phẩm theo trang
+        prisma.artwork.findMany({
+            where: whereClause,
+            orderBy: orderByClause,
+            skip: skip,
+            take: take,
+            include: {
+                author: { select: { id: true, name: true, avatarUrl: true } },
+                _count: { select: { reactions: true, comments: true } },
+                reactions: {
+                    where: { userId: loggedInUserId || -1 },
+                    include: { reactionType: true }
+                }
+            }
+        }),
+        // 2. Đếm tổng số tác phẩm khớp với bộ lọc
+        prisma.artwork.count({ where: whereClause })
+    ]);
+
+    const totalPages = Math.ceil(totalArtworks / PAGE_SIZE);
+
+    return { artworks, totalPages };
 };
 
 const findById = (id, loggedInUserId) => {
@@ -83,7 +98,7 @@ const remove = (id) => {
 };
 
 //tìm tác phẩm nổi bật
-const findFeatured = () => {
+const findFeatured = (loggedInUserId) => {
     return prisma.artwork.findMany({
         where: { status: 'approved' },
         orderBy: { createdAt: 'desc' },
@@ -103,7 +118,7 @@ const findFeatured = () => {
 };
 
 //tìm tác phẩm mới nhất
-const findLatest = () => {
+const findLatest = (loggedInUserId) => {
     return prisma.artwork.findMany({
         where: { status: 'approved' },
         orderBy: { createdAt: 'desc' },
@@ -189,7 +204,7 @@ const deleteReaction = (userId, artworkId) => {
     });
 };
 module.exports = {
-    findAllApproved,
+    findAll,
     findById,
     create,
     update,

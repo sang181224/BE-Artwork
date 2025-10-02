@@ -23,7 +23,7 @@ router.get('/profiles/:id/drafts', requireAuth, userController.getProfileDrafts)
 
 
 //artwork
-router.get('/artwork', optionalAuth, artworkController.getApprovedArtworks);//lấy tác phẩm đã được duyệt của all
+router.get('/artworks', optionalAuth, artworkController.getApprovedArtworks);//lấy tác phẩm đã được duyệt của all
 router.get('/artwork/detail/:id', optionalAuth, artworkController.getArtworkById);//lấy chi tiết tác phẩm
 router.get('/artwork/featured', optionalAuth, artworkController.getFeaturedArtworks);//lấy tác phẩm nổi bật
 router.get('/artwork/latest', optionalAuth,artworkController.getLatestArtworks);//lấy tác phẩm mới nhất

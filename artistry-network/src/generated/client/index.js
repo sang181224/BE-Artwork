@@ -274,7 +274,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "E:\\CDIO4\\BE-Artwork\\artistry-network\\src\\generated\\client",
+      "value": "C:\\Users\\DELL\\Desktop\\DoAnCDIO4\\Be-Nodejs\\artistry-network\\src\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -288,7 +288,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "E:\\CDIO4\\BE-Artwork\\artistry-network\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\DELL\\Desktop\\DoAnCDIO4\\Be-Nodejs\\artistry-network\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
