@@ -138,17 +138,19 @@ const getProfile = async (req, res) => {
         const profileId = req.params.id;
         const loggedInUserId = req.user ? req.user.userId : null;
 
-        const profile = await userModel.findBasicProfileById(profileId);
+        const profile = await userModel.findBasicProfileById(profileId, loggedInUserId);
 
         if (!profile) {
             return res.status(404).json({ message: 'Không tìm thấy hồ sơ người dùng.' });
         }
-
+        const { isFollowing, ...profileData } = profile;
         const isOwner = loggedInUserId === profile.id;
 
         res.status(200).json({
             isOwner,
-            profile
+            isFollowing,
+            profile: profileData,
+
         });
     } catch (error) {
         console.error("Lỗi khi lấy thông tin profile:", error);
@@ -174,7 +176,7 @@ const getProfileArtworks = async (req, res) => {
         const loggedInUserId = req.user ? req.user.userId : null;
         const artworks = await userModel.findApprovedArtworksByAuthor(id, loggedInUserId);
 
-        const responseData = artworks.map(art => formatArtwork(art));
+        const responseData = artworks.map(art => formatArtwork(art, loggedInUserId));
         
         res.status(200).json(responseData);
     } catch (error) {
@@ -182,7 +184,7 @@ const getProfileArtworks = async (req, res) => {
     }
 };
 
-// HÀM MỚI: Lấy các bài đăng cần quản lý cho tab 'Quản lý bài đăng'
+//Lấy các bài đăng cần quản lý cho tab 'Quản lý bài đăng'
 const getProfileDrafts = async (req, res) => {
     try {
         const profileId = req.params.id;
@@ -197,25 +199,6 @@ const getProfileDrafts = async (req, res) => {
         res.status(500).json({ message: "Lỗi server." });
     }
 };
-const follow = async (req, res) => {
-    try {
-        const followerId = req.user.userId; // ID của người đi theo dõi (lấy từ token)
-        const followingId = parseInt(req.params.id); // ID của người được theo dõi (lấy từ URL)
-
-        if (followerId === followingId) {
-            return res.status(400).json({ message: "Bạn không thể tự theo dõi chính mình." });
-        }
-
-        await userModel.followUser(followerId, followingId);
-        res.status(200).json({ message: "Theo dõi thành công." });
-    } catch (error) {
-        // Bắt lỗi nếu đã theo dõi rồi
-        if (error.code === 'P2002') {
-            return res.status(409).json({ message: "Bạn đã theo dõi người này rồi." });
-        }
-        res.status(500).json({ message: "Lỗi server." });
-    }
-};
 module.exports = {
     createMember,
     upload,
@@ -223,7 +206,6 @@ module.exports = {
     getMemberById,
     updateMemberById,
     getProfile,
-    follow,
     getProfileStats,
     getProfileArtworks,
     getProfileDrafts

@@ -55,9 +55,28 @@ const checkLoginUser = async (data) => {
 const getUserById = async (id) => {
     return await prisma.user.findUnique({ where: { id }, include: { country: true } });
 }
-const updateUserById = async (data, id) => {
-    return await prisma.user.update({ where: { id }, data })
-}
+const findById = (id) => {
+    return prisma.user.findUnique({
+        where: { id: parseInt(id) },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+            coverPhotoUrl: true,
+            bio: true,
+        }
+    });
+};
+// const updateUserById = async (data, id) => {
+//     return await prisma.user.update({ where: { id }, data })
+// }
+const updateProfile = (id, data) => {
+    return prisma.user.update({
+        where: { id: parseInt(id) },
+        data: data // data là object đã được làm sạch ở controller
+    });
+};
 // const findProfileById = async (profileId, loggedInUserId) => {
 //     const id = parseInt(profileId);
 
@@ -119,18 +138,27 @@ const updateUserById = async (data, id) => {
 // };
 
 //Láy thông tin cơ bản của user
-const findBasicProfileById = (id) => {
-    return prisma.user.findUnique({
-        where: { id: parseInt(id) },
-        select: {
-            id: true,
-            name: true,
-            avatarUrl: true,
-            coverPhotoUrl: true,
-            bio: true,
-            skills: true
-        }
-    });
+const findBasicProfileById = async (id, loggedInUserId) => {
+    const profileId = parseInt(id);
+    const [profileUser, followCheck] = await Promise.all([
+        prisma.user.findUnique({
+            where: { id: profileId },
+            select: { id: true, name: true, avatarUrl: true, bio: true, coverPhotoUrl: true }
+        }),
+        // Kiểm tra xem loggedInUser có đang follow profileId không
+        loggedInUserId ? prisma.follows.count({
+            where: {
+                followerId: loggedInUserId,
+                followingId: profileId,
+            }
+        }) : 0
+    ]);
+    if (!profileUser) return null;
+    
+    return {
+        ...profileUser,
+        isFollowing: followCheck > 0
+    };
 };
 
 //thống kê
@@ -157,14 +185,6 @@ const getStatsById = async (id) => {
         followers: followersCount,
         following: followingCount
     };
-};
-const followUser = (followerId, followingId) => {
-    return prisma.follows.create({
-        data: {
-            followerId: followerId,
-            followingId: followingId
-        }
-    });
 };
 //lấy tác phẩm đã được duyệt
 const findApprovedArtworksByAuthor = (authorId, loggedInUserId) => {
@@ -201,18 +221,33 @@ const findNonPublicArtworksByAuthor = (authorId) => {
     return prisma.artwork.findMany({
         where: {
             authorId: parseInt(authorId),
-            status: { in: ['draft', 'pending', 'rejected'] }
+            status: { in: ['draft', 'pending', 'rejected', 'deleted'] }
         },
         orderBy: { updatedAt: 'desc' }
+    });
+};
+const follow = (followerId, followingId) => {
+    return prisma.follows.create({
+        data: { followerId, followingId }
+    });
+};
+
+const unfollow = (followerId, followingId) => {
+    return prisma.follows.delete({
+        where: {
+            followerId_followingId: { followerId, followingId }
+        }
     });
 };
 module.exports = {
     createUser,
     checkEmail,
     checkLoginUser,
+    findById,
     getUserById,
-    updateUserById,
-    followUser,
+    updateProfile,
+    follow,
+    unfollow,
     findBasicProfileById,
     getStatsById,
     findApprovedArtworksByAuthor,

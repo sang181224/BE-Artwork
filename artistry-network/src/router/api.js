@@ -1,8 +1,10 @@
 const express = require('express');
 const userController = require('../controller/userController');
 const artworkController = require('../controller/artworkController');
+const commentController = require('../controller/commentController');
 const categoryController = require('../controller/categoryController');
 const messageController = require('../controller/messageController');
+const profileController = require('../controller/profileController');
 const requireAuth = require('../middleware/requireAuth');
 const optionalAuth = require('../middleware/optionalAuth');
 const requireAdmin = require('../middleware/requireAdmin');
@@ -14,7 +16,9 @@ router.post('/login', userController.loginMember);
 
 //profile
 router.get('/profiles/:id', optionalAuth, userController.getProfile);
-router.post('/:id/follow', requireAuth, userController.follow); //theo dõi, bỏ theo dõi
+router.post('/profiles/:id/follow', requireAuth, profileController.followUser);
+router.put('/profiles/me', requireAuth, profileController.uploadProfileImages, profileController.updateProfile);
+router.delete('/profiles/:id/follow', requireAuth, profileController.unfollowUser);
 router.get('/profiles/:id/stats', userController.getProfileStats);
 router.get('/profiles/:id/artworks', optionalAuth, userController.getProfileArtworks);//Lấy các tác phẩm trong trong profile 
 router.get('/profiles/:id/drafts', requireAuth, userController.getProfileDrafts); //lấy các tác phẩm ở trạng thái nháp, chờ duyệt
@@ -34,6 +38,13 @@ router.delete('/artwork/:id/react', requireAuth, artworkController.removeReactio
 
 // Route cần đăng nhập
 router.post('/artwork/add', requireAuth, artworkController.upload, artworkController.createArtwork);
+router.post('/artwork/update/:id', requireAuth, artworkController.upload, artworkController.updateArtwork);
+router.put('/artwork/remove/:id', requireAuth, artworkController.removeArtwork);
+
+//comment
+router.post('/artwork/detail/comment/:id', requireAuth, commentController.createComment);
+router.post('/artwork/detail/comment/:id', requireAuth, commentController.createComment);
+router.delete('/artwork/detail/comment/:id', requireAuth, commentController.deleteComment);
 
 // ADMIN
 //category admin

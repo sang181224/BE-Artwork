@@ -5,6 +5,7 @@ const fs = require('fs');
 const validateArtwork = require('../validation/validateArtwork');
 const artworkModel = require('../model/artworkModel');
 const { formatArtwork } = require('../utils/artworkFormatter');
+const { error } = require('console');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -38,17 +39,17 @@ const getApprovedArtworks = async (req, res) => {
         const loggedInUserId = req.user ? req.user.userId : null;
 
         // Gọi model với các tùy chọn
-        const { artworks, totalPages } = await artworkModel.findAll({ 
-            page, 
-            sortBy, 
+        const { artworks, totalPages } = await artworkModel.findAll({
+            page,
+            sortBy,
             categoryId,
             minPrice,
             maxPrice,
-            loggedInUserId 
+            loggedInUserId
         });
 
         // Định dạng lại dữ liệu trước khi gửi đi
-        const responseData = artworks.map(art => formatArtwork(art));
+        const responseData = artworks.map(art => formatArtwork(art, loggedInUserId));
 
         res.status(200).json({
             artworks: responseData,
@@ -66,13 +67,23 @@ const getArtworkById = async (req, res) => {
         const { id } = req.params;
         // Lấy ID người dùng từ middleware (nếu có)
         const loggedInUserId = req.user ? req.user.userId : null;
-        console.log(loggedInUserId)
         const artwork = await artworkModel.findById(id, loggedInUserId);
-        const responseData = formatArtwork(artwork);
+        const responseData = formatArtwork(artwork, loggedInUserId);
+
+        const commentsWithOwnership = artwork.comments.map(comment => ({
+            ...comment,
+            isOwner: loggedInUserId === comment.authorId
+        }));
+
+        const finnalResponse = {
+            ...responseData,
+            comments: commentsWithOwnership
+        }
+
         if (!artwork) {
             return res.status(404).json({ message: "Không tìm thấy tác phẩm." });
         }
-        res.status(200).json(responseData);
+        res.status(200).json(finnalResponse);
     } catch (error) {
         res.status(500).json({ message: "Lỗi server khi lấy chi tiết tác phẩm.", error: error.message });
     }
@@ -116,7 +127,101 @@ const createArtwork = async (req, res) => {
         res.status(500).json({ message: "Lỗi server khi tạo tác phẩm.", error: error.message })
     }
 };
+const updateArtwork = async (req, res) => {
+    const newImage = req.files || [];
+    const cleanupNewImages = () => {
+        if (newImage.length > 0) {
+            newImage.forEach(file => fs.unlinkSync(file.path));
+        }
+    };
+    try {
+        const data = req.body;
+        const artworkId = parseInt(req.params.id);
+        const userId = parseInt(req.user.userId);
+        const existingArtwork = await artworkModel.existingArtwork(artworkId);
 
+        if (!existingArtwork) {
+            cleanupNewImages();
+            return res.status(404).json({ error: 'Không tìm thấy artwork' });
+        }
+
+        if (existingArtwork.authorId !== userId) {
+            cleanupNewImages();
+            return res.status(403).json({ error: 'Bạn không có quyền chỉnh sửa artwork này' });
+        }
+
+        const error = validateArtwork(data, newImage, true);
+        if (Object.keys(error).length > 0) {
+            cleanupNewImages();
+            return res.status(400).json(error);
+        }
+        const imageDelete = data.imageDelete ? JSON.parse(data.imageDelete) : [];
+        const oldImage = JSON.parse(existingArtwork.imageUrls || '[]');
+        if (imageDelete.length > 0) {
+            imageDelete.forEach(image => {
+                if (fs.existsSync(image)) {
+                    fs.unlinkSync(image);
+                }
+            });
+        }
+        const remainOldImage = oldImage.filter(image => !imageDelete.includes(image));
+        const newImagePaths = newImage ? newImage.map(image => image.path) : [];
+        const finalImage = [...remainOldImage, ...newImagePaths];
+        if (finalImage.length === 0) {
+            return res.status(400).json({ error: 'Tối thiểu là 1 ảnh' });
+        }
+        if (finalImage.length > 5) {
+            return res.status(400).json({ error: 'Tối đa là 5 ảnh' });
+        }
+        const dataUpdate = {
+            title: data.title,
+            description: data.description,
+            price: parseFloat(data.price),
+            status: 'pending',
+            imageUrls: JSON.stringify(finalImage),
+            dimensions: data.dimensions,
+            authorId: userId,
+            categoryId: parseInt(data.categoryId),
+        }
+        const update = await artworkModel.update(artworkId, dataUpdate);
+        res.json({ message: 'Cập nhật sản phẩm thành công', artwork: update });
+    } catch (error) {
+        console.error('Lỗi khi cập nhật artwork');
+        if (newImage.length > 0) {
+            newImage.forEach(file => fs.unlinkSync(file.path));
+        }
+        res.status(500).json('Lỗi ở phía server');
+    }
+}
+const removeArtwork = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const userId = parseInt(req.user.userId);
+        const artwork = await artworkModel.existingArtwork(id);
+        if (!artwork) {
+            return res.status(404).json({ error: 'Không tìm thấy tác phẩm' });
+        }
+        if (artwork.authorId !== userId) {
+            return res.status(403).json({ error: 'Bạn không có quyền xoá artwork này' });
+        }
+        // const imagePath = JSON.parse(artwork.imageUrls || '[]');
+        // if (imagePath.length > 0) {
+        //     imagePath.forEach((image) => {
+        //         try {
+        //             if (fs.existsSync(image)) {
+        //                 fs.unlinkSync(image);
+        //             }
+        //         } catch (error) {
+        //             console.log('Lỗi khi xoá file ', error);
+        //         }
+        //     })
+        // }
+        await artworkModel.remove(id);
+        return res.json({ message: 'Xoá thành công' });
+    } catch (error) {
+        return res.status(500).json({error: 'Lỗi khi xoá tác phẩm ', error})
+    }
+}
 //tìm tác phẩm nổi bật
 const getFeaturedArtworks = async (req, res) => {
     try {
@@ -124,8 +229,8 @@ const getFeaturedArtworks = async (req, res) => {
         const loggedInUserId = req.user ? req.user.userId : null;
         // console.log('userid ở controller: ', req.user);
         const artworks = await artworkModel.findFeatured(loggedInUserId);
-        
-        const responseData = artworks.map(art => formatArtwork(art));
+
+        const responseData = artworks.map(art => formatArtwork(art, loggedInUserId));
         res.status(200).json(responseData);
     } catch (error) {
         res.status(500).json({ message: "Lỗi server." });
@@ -138,7 +243,7 @@ const getLatestArtworks = async (req, res) => {
         // Lấy ID người dùng từ middleware (nếu có)
         const loggedInUserId = req.user ? req.user.userId : null;
         const artworks = await artworkModel.findLatest(loggedInUserId);
-        const responseData = artworks.map(art => formatArtwork(art));
+        const responseData = artworks.map(art => formatArtwork(art, loggedInUserId));
         res.status(200).json(responseData);
     } catch (error) {
         res.status(500).json({ message: "Lỗi server." });
@@ -225,6 +330,8 @@ const removeReaction = async (req, res) => {
 };
 module.exports = {
     upload,
+    updateArtwork,
+    removeArtwork,
     getApprovedArtworks,
     getArtworkById,
     getLatestArtworks,

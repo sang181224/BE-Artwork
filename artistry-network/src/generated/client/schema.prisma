@@ -95,7 +95,9 @@ model Comment {
   id         Int      @id @default(autoincrement())
   content    String
   image_user String   @db.Text
-  parentId   Int?
+  name_user  String
+  isDeleted  Boolean  @default(false)
+  parentId   Int
   authorId   Int
   artworkId  Int
   author     User     @relation(fields: [authorId], references: [id])

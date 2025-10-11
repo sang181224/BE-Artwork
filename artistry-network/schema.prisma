@@ -95,7 +95,9 @@ model Comment {
     id         Int      @id @default(autoincrement())
     content    String
     image_user String   @db.Text
-    parentId   Int?
+    name_user  String
+    isDeleted Boolean  @default(false)
+    parentId   Int
     authorId   Int
     artworkId  Int
     author     User     @relation(fields: [authorId], references: [id])
@@ -133,15 +135,15 @@ model Follows {
 }
 
 model Message {
-  id          Int      @id @default(autoincrement())
-  content     String   @db.Text
-  createdAt   DateTime @default(now())
-  senderId    Int
-  receiverId  Int
-  read        Boolean  @default(false)
+    id         Int      @id @default(autoincrement())
+    content    String   @db.Text
+    createdAt  DateTime @default(now())
+    senderId   Int
+    receiverId Int
+    read       Boolean  @default(false)
 
-  sender    User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
-  receiver  User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+    sender   User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+    receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
 
-  @@index([senderId, receiverId])
+    @@index([senderId, receiverId])
 }

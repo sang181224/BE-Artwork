@@ -174,6 +174,8 @@ exports.Prisma.CommentScalarFieldEnum = {
   id: 'id',
   content: 'content',
   image_user: 'image_user',
+  name_user: 'name_user',
+  isDeleted: 'isDeleted',
   parentId: 'parentId',
   authorId: 'authorId',
   artworkId: 'artworkId',
@@ -265,7 +267,8 @@ exports.Prisma.HashtagOrderByRelevanceFieldEnum = {
 
 exports.Prisma.CommentOrderByRelevanceFieldEnum = {
   content: 'content',
-  image_user: 'image_user'
+  image_user: 'image_user',
+  name_user: 'name_user'
 };
 
 exports.Prisma.ReactionTypeOrderByRelevanceFieldEnum = {

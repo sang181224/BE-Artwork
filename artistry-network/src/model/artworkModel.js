@@ -55,7 +55,13 @@ const findAll = async (options = {}) => {
 
 const findById = (id, loggedInUserId) => {
     return prisma.artwork.findUnique({
-        where: { id: parseInt(id), status: 'approved' },
+        where: {
+            id: parseInt(id),
+            OR: [
+                { authorId: loggedInUserId },
+                { status: 'approved' }
+            ]
+        },
         include: {
             author: {
                 select: {
@@ -65,7 +71,9 @@ const findById = (id, loggedInUserId) => {
                     email: true
                 }
             },
-            comments: true,
+            comments: {
+                orderBy: { createdAt: 'desc' }
+            },
             _count: {
                 select: {
                     reactions: true, // Đếm số lượng reactions
@@ -81,6 +89,11 @@ const findById = (id, loggedInUserId) => {
     });
 };
 
+//Kiểm tra tác phẩm có tồn tại
+const existingArtwork = (id) => {
+    return prisma.artwork.findUnique({ where: { id } })
+}
+
 const create = (data) => {
     return prisma.artwork.create({ data });
 };
@@ -93,8 +106,9 @@ const update = (id, data) => {
 };
 
 const remove = (id) => {
-    return prisma.artwork.delete({
-        where: { id: parseInt(id) }
+    return prisma.artwork.update({
+        where: { id: parseInt(id) },
+        data: { status: 'deleted' }
     });
 };
 
@@ -208,6 +222,7 @@ module.exports = {
     findAll,
     findById,
     create,
+    existingArtwork,
     update,
     remove,
     findFeatured,

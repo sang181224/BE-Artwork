@@ -8159,6 +8159,8 @@ export namespace Prisma {
     id: number | null
     content: string | null
     image_user: string | null
+    name_user: string | null
+    isDeleted: boolean | null
     parentId: number | null
     authorId: number | null
     artworkId: number | null
@@ -8169,6 +8171,8 @@ export namespace Prisma {
     id: number | null
     content: string | null
     image_user: string | null
+    name_user: string | null
+    isDeleted: boolean | null
     parentId: number | null
     authorId: number | null
     artworkId: number | null
@@ -8179,6 +8183,8 @@ export namespace Prisma {
     id: number
     content: number
     image_user: number
+    name_user: number
+    isDeleted: number
     parentId: number
     authorId: number
     artworkId: number
@@ -8205,6 +8211,8 @@ export namespace Prisma {
     id?: true
     content?: true
     image_user?: true
+    name_user?: true
+    isDeleted?: true
     parentId?: true
     authorId?: true
     artworkId?: true
@@ -8215,6 +8223,8 @@ export namespace Prisma {
     id?: true
     content?: true
     image_user?: true
+    name_user?: true
+    isDeleted?: true
     parentId?: true
     authorId?: true
     artworkId?: true
@@ -8225,6 +8235,8 @@ export namespace Prisma {
     id?: true
     content?: true
     image_user?: true
+    name_user?: true
+    isDeleted?: true
     parentId?: true
     authorId?: true
     artworkId?: true
@@ -8322,7 +8334,9 @@ export namespace Prisma {
     id: number
     content: string
     image_user: string
-    parentId: number | null
+    name_user: string
+    isDeleted: boolean
+    parentId: number
     authorId: number
     artworkId: number
     createdAt: Date
@@ -8351,6 +8365,8 @@ export namespace Prisma {
     id?: boolean
     content?: boolean
     image_user?: boolean
+    name_user?: boolean
+    isDeleted?: boolean
     parentId?: boolean
     authorId?: boolean
     artworkId?: boolean
@@ -8365,13 +8381,15 @@ export namespace Prisma {
     id?: boolean
     content?: boolean
     image_user?: boolean
+    name_user?: boolean
+    isDeleted?: boolean
     parentId?: boolean
     authorId?: boolean
     artworkId?: boolean
     createdAt?: boolean
   }
 
-  export type CommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "image_user" | "parentId" | "authorId" | "artworkId" | "createdAt", ExtArgs["result"]["comment"]>
+  export type CommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "image_user" | "name_user" | "isDeleted" | "parentId" | "authorId" | "artworkId" | "createdAt", ExtArgs["result"]["comment"]>
   export type CommentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
     artwork?: boolean | ArtworkDefaultArgs<ExtArgs>
@@ -8387,7 +8405,9 @@ export namespace Prisma {
       id: number
       content: string
       image_user: string
-      parentId: number | null
+      name_user: string
+      isDeleted: boolean
+      parentId: number
       authorId: number
       artworkId: number
       createdAt: Date
@@ -8765,6 +8785,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Comment", 'Int'>
     readonly content: FieldRef<"Comment", 'String'>
     readonly image_user: FieldRef<"Comment", 'String'>
+    readonly name_user: FieldRef<"Comment", 'String'>
+    readonly isDeleted: FieldRef<"Comment", 'Boolean'>
     readonly parentId: FieldRef<"Comment", 'Int'>
     readonly authorId: FieldRef<"Comment", 'Int'>
     readonly artworkId: FieldRef<"Comment", 'Int'>
@@ -13064,6 +13086,8 @@ export namespace Prisma {
     id: 'id',
     content: 'content',
     image_user: 'image_user',
+    name_user: 'name_user',
+    isDeleted: 'isDeleted',
     parentId: 'parentId',
     authorId: 'authorId',
     artworkId: 'artworkId',
@@ -13200,7 +13224,8 @@ export namespace Prisma {
 
   export const CommentOrderByRelevanceFieldEnum: {
     content: 'content',
-    image_user: 'image_user'
+    image_user: 'image_user',
+    name_user: 'name_user'
   };
 
   export type CommentOrderByRelevanceFieldEnum = (typeof CommentOrderByRelevanceFieldEnum)[keyof typeof CommentOrderByRelevanceFieldEnum]
@@ -13678,7 +13703,9 @@ export namespace Prisma {
     id?: IntFilter<"Comment"> | number
     content?: StringFilter<"Comment"> | string
     image_user?: StringFilter<"Comment"> | string
-    parentId?: IntNullableFilter<"Comment"> | number | null
+    name_user?: StringFilter<"Comment"> | string
+    isDeleted?: BoolFilter<"Comment"> | boolean
+    parentId?: IntFilter<"Comment"> | number
     authorId?: IntFilter<"Comment"> | number
     artworkId?: IntFilter<"Comment"> | number
     createdAt?: DateTimeFilter<"Comment"> | Date | string
@@ -13690,7 +13717,9 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     image_user?: SortOrder
-    parentId?: SortOrderInput | SortOrder
+    name_user?: SortOrder
+    isDeleted?: SortOrder
+    parentId?: SortOrder
     authorId?: SortOrder
     artworkId?: SortOrder
     createdAt?: SortOrder
@@ -13706,7 +13735,9 @@ export namespace Prisma {
     NOT?: CommentWhereInput | CommentWhereInput[]
     content?: StringFilter<"Comment"> | string
     image_user?: StringFilter<"Comment"> | string
-    parentId?: IntNullableFilter<"Comment"> | number | null
+    name_user?: StringFilter<"Comment"> | string
+    isDeleted?: BoolFilter<"Comment"> | boolean
+    parentId?: IntFilter<"Comment"> | number
     authorId?: IntFilter<"Comment"> | number
     artworkId?: IntFilter<"Comment"> | number
     createdAt?: DateTimeFilter<"Comment"> | Date | string
@@ -13718,7 +13749,9 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     image_user?: SortOrder
-    parentId?: SortOrderInput | SortOrder
+    name_user?: SortOrder
+    isDeleted?: SortOrder
+    parentId?: SortOrder
     authorId?: SortOrder
     artworkId?: SortOrder
     createdAt?: SortOrder
@@ -13736,7 +13769,9 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Comment"> | number
     content?: StringWithAggregatesFilter<"Comment"> | string
     image_user?: StringWithAggregatesFilter<"Comment"> | string
-    parentId?: IntNullableWithAggregatesFilter<"Comment"> | number | null
+    name_user?: StringWithAggregatesFilter<"Comment"> | string
+    isDeleted?: BoolWithAggregatesFilter<"Comment"> | boolean
+    parentId?: IntWithAggregatesFilter<"Comment"> | number
     authorId?: IntWithAggregatesFilter<"Comment"> | number
     artworkId?: IntWithAggregatesFilter<"Comment"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Comment"> | Date | string
@@ -14342,7 +14377,9 @@ export namespace Prisma {
   export type CommentCreateInput = {
     content: string
     image_user: string
-    parentId?: number | null
+    name_user: string
+    isDeleted?: boolean
+    parentId: number
     createdAt?: Date | string
     author: UserCreateNestedOneWithoutCommentsInput
     artwork: ArtworkCreateNestedOneWithoutCommentsInput
@@ -14352,7 +14389,9 @@ export namespace Prisma {
     id?: number
     content: string
     image_user: string
-    parentId?: number | null
+    name_user: string
+    isDeleted?: boolean
+    parentId: number
     authorId: number
     artworkId: number
     createdAt?: Date | string
@@ -14361,7 +14400,9 @@ export namespace Prisma {
   export type CommentUpdateInput = {
     content?: StringFieldUpdateOperationsInput | string
     image_user?: StringFieldUpdateOperationsInput | string
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    name_user?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutCommentsNestedInput
     artwork?: ArtworkUpdateOneRequiredWithoutCommentsNestedInput
@@ -14371,7 +14412,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
     image_user?: StringFieldUpdateOperationsInput | string
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    name_user?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
     artworkId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14381,7 +14424,9 @@ export namespace Prisma {
     id?: number
     content: string
     image_user: string
-    parentId?: number | null
+    name_user: string
+    isDeleted?: boolean
+    parentId: number
     authorId: number
     artworkId: number
     createdAt?: Date | string
@@ -14390,7 +14435,9 @@ export namespace Prisma {
   export type CommentUpdateManyMutationInput = {
     content?: StringFieldUpdateOperationsInput | string
     image_user?: StringFieldUpdateOperationsInput | string
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    name_user?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -14398,7 +14445,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
     image_user?: StringFieldUpdateOperationsInput | string
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    name_user?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
     artworkId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15115,15 +15164,9 @@ export namespace Prisma {
     hashtagId?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type CommentOrderByRelevanceInput = {
@@ -15136,6 +15179,8 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     image_user?: SortOrder
+    name_user?: SortOrder
+    isDeleted?: SortOrder
     parentId?: SortOrder
     authorId?: SortOrder
     artworkId?: SortOrder
@@ -15153,6 +15198,8 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     image_user?: SortOrder
+    name_user?: SortOrder
+    isDeleted?: SortOrder
     parentId?: SortOrder
     authorId?: SortOrder
     artworkId?: SortOrder
@@ -15163,6 +15210,8 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     image_user?: SortOrder
+    name_user?: SortOrder
+    isDeleted?: SortOrder
     parentId?: SortOrder
     authorId?: SortOrder
     artworkId?: SortOrder
@@ -15176,20 +15225,12 @@ export namespace Prisma {
     artworkId?: SortOrder
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ReactionTypeOrderByRelevanceInput = {
@@ -15294,11 +15335,6 @@ export namespace Prisma {
     followingId?: SortOrder
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type MessageOrderByRelevanceInput = {
     fields: MessageOrderByRelevanceFieldEnum | MessageOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -15342,14 +15378,6 @@ export namespace Prisma {
     id?: SortOrder
     senderId?: SortOrder
     receiverId?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type RoleCreateNestedOneWithoutUsersInput = {
@@ -16008,12 +16036,8 @@ export namespace Prisma {
     connect?: ArtworkWhereUniqueInput
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutCommentsNestedInput = {
@@ -16154,10 +16178,6 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutReceivedMessagesInput, UserUncheckedCreateWithoutReceivedMessagesInput>
     connectOrCreate?: UserCreateOrConnectWithoutReceivedMessagesInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutSentMessagesNestedInput = {
@@ -16366,22 +16386,6 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -16457,7 +16461,9 @@ export namespace Prisma {
   export type CommentCreateWithoutAuthorInput = {
     content: string
     image_user: string
-    parentId?: number | null
+    name_user: string
+    isDeleted?: boolean
+    parentId: number
     createdAt?: Date | string
     artwork: ArtworkCreateNestedOneWithoutCommentsInput
   }
@@ -16466,7 +16472,9 @@ export namespace Prisma {
     id?: number
     content: string
     image_user: string
-    parentId?: number | null
+    name_user: string
+    isDeleted?: boolean
+    parentId: number
     artworkId: number
     createdAt?: Date | string
   }
@@ -16668,7 +16676,9 @@ export namespace Prisma {
     id?: IntFilter<"Comment"> | number
     content?: StringFilter<"Comment"> | string
     image_user?: StringFilter<"Comment"> | string
-    parentId?: IntNullableFilter<"Comment"> | number | null
+    name_user?: StringFilter<"Comment"> | string
+    isDeleted?: BoolFilter<"Comment"> | boolean
+    parentId?: IntFilter<"Comment"> | number
     authorId?: IntFilter<"Comment"> | number
     artworkId?: IntFilter<"Comment"> | number
     createdAt?: DateTimeFilter<"Comment"> | Date | string
@@ -16967,7 +16977,9 @@ export namespace Prisma {
   export type CommentCreateWithoutArtworkInput = {
     content: string
     image_user: string
-    parentId?: number | null
+    name_user: string
+    isDeleted?: boolean
+    parentId: number
     createdAt?: Date | string
     author: UserCreateNestedOneWithoutCommentsInput
   }
@@ -16976,7 +16988,9 @@ export namespace Prisma {
     id?: number
     content: string
     image_user: string
-    parentId?: number | null
+    name_user: string
+    isDeleted?: boolean
+    parentId: number
     authorId: number
     createdAt?: Date | string
   }
@@ -18144,7 +18158,9 @@ export namespace Prisma {
     id?: number
     content: string
     image_user: string
-    parentId?: number | null
+    name_user: string
+    isDeleted?: boolean
+    parentId: number
     artworkId: number
     createdAt?: Date | string
   }
@@ -18229,7 +18245,9 @@ export namespace Prisma {
   export type CommentUpdateWithoutAuthorInput = {
     content?: StringFieldUpdateOperationsInput | string
     image_user?: StringFieldUpdateOperationsInput | string
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    name_user?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     artwork?: ArtworkUpdateOneRequiredWithoutCommentsNestedInput
   }
@@ -18238,7 +18256,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
     image_user?: StringFieldUpdateOperationsInput | string
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    name_user?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: IntFieldUpdateOperationsInput | number
     artworkId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18247,7 +18267,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
     image_user?: StringFieldUpdateOperationsInput | string
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    name_user?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: IntFieldUpdateOperationsInput | number
     artworkId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18419,7 +18441,9 @@ export namespace Prisma {
     id?: number
     content: string
     image_user: string
-    parentId?: number | null
+    name_user: string
+    isDeleted?: boolean
+    parentId: number
     authorId: number
     createdAt?: Date | string
   }
@@ -18457,7 +18481,9 @@ export namespace Prisma {
   export type CommentUpdateWithoutArtworkInput = {
     content?: StringFieldUpdateOperationsInput | string
     image_user?: StringFieldUpdateOperationsInput | string
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    name_user?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutCommentsNestedInput
   }
@@ -18466,7 +18492,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
     image_user?: StringFieldUpdateOperationsInput | string
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    name_user?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18475,7 +18503,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
     image_user?: StringFieldUpdateOperationsInput | string
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    name_user?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: IntFieldUpdateOperationsInput | number
     authorId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
