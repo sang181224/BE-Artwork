@@ -70,6 +70,7 @@ const getArtworkById = async (req, res) => {
         const artwork = await artworkModel.findById(id, loggedInUserId);
         const responseData = formatArtwork(artwork, loggedInUserId);
 
+        console.log('chạy đến đây')
         const commentsWithOwnership = artwork.comments.map(comment => ({
             ...comment,
             isOwner: loggedInUserId === comment.authorId
@@ -79,7 +80,6 @@ const getArtworkById = async (req, res) => {
             ...responseData,
             comments: commentsWithOwnership
         }
-
         if (!artwork) {
             return res.status(404).json({ message: "Không tìm thấy tác phẩm." });
         }

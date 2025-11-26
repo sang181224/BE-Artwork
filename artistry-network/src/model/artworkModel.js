@@ -54,6 +54,9 @@ const findAll = async (options = {}) => {
 };
 
 const findById = (id, loggedInUserId) => {
+    if (!loggedInUserId) {
+        loggedInUserId = -1
+    }
     return prisma.artwork.findUnique({
         where: {
             id: parseInt(id),
