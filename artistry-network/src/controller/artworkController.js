@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const validateArtwork = require('../validation/validateArtwork');
 const artworkModel = require('../model/artworkModel');
+const { moderateText, moderateImage } = require('../utils/moderation');
 const { formatArtwork } = require('../utils/artworkFormatter');
 const { error } = require('console');
 
@@ -107,11 +108,32 @@ const createArtwork = async (req, res) => {
         }
         data.image = imageUrls ? imageUrls.map(file => file.path) : [];
         data.image = JSON.stringify(data.image);
+
+        // --- TÍCH HỢP AI MODERATION ---
+        // 1. Kiểm duyệt văn bản (tiêu đề + mô tả)
+        const textContent = `${data.title}. ${data.description}`;
+        const isTextViolated = await moderateText(textContent);
+        console.log("Checking text:", textContent);
+        console.log("Text violated:", isTextViolated);
+
+        // 2. Kiểm duyệt hình ảnh
+        let isImageViolated = false;
+        for (const image of imageUrls) {
+            if (await moderateImage(image.path)) {
+                isImageViolated = true;
+                break; // Dừng lại ngay khi phát hiện ảnh vi phạm đầu tiên
+            }
+        }
+        console.log("Image violated:", isImageViolated);
+
+        // 3. Quyết định trạng thái dựa trên kết quả kiểm duyệt
+        const finalStatus = isTextViolated || isImageViolated ? 'pending' : 'approved';
+
         const artworkData = ({
             title: data.title,
             description: data.description,
             price: parseFloat(data.price),
-            status: 'pending', // Mặc định là chờ duyệt
+            status: finalStatus, // Trạng thái được quyết định bởi AI
             imageUrls: data.image,
             dimensions: data.dimensions,
             authorId: authorId,
@@ -119,7 +141,10 @@ const createArtwork = async (req, res) => {
         });
         console.log(artworkData);
         const newArtwork = await artworkModel.create(artworkData);
-        res.status(201).json(newArtwork);
+        res.status(201).json({
+            ...newArtwork,
+            moderationStatus: `Artwork automatically ${finalStatus}. Text violation: ${isTextViolated}, Image violation: ${isImageViolated}.`
+        });
     } catch (error) {
         imageUrls.forEach(image => {
             fs.unlinkSync(image.path)
@@ -173,11 +198,28 @@ const updateArtwork = async (req, res) => {
         if (finalImage.length > 5) {
             return res.status(400).json({ error: 'Tối đa là 5 ảnh' });
         }
+
+        // --- TÍCH HỢP AI MODERATION KHI CẬP NHẬT ---
+        const textContent = `${data.title}. ${data.description}`;
+        const isTextViolated = await moderateText(textContent);
+
+        let isImageViolated = false;
+        // Chỉ kiểm duyệt các ảnh mới được tải lên
+        for (const image of newImage) {
+            if (await moderateImage(image.path)) {
+                isImageViolated = true;
+                break;
+            }
+        }
+
+        // Nếu có nội dung mới vi phạm, chuyển về trạng thái chờ duyệt
+        const finalStatus = isTextViolated || isImageViolated ? 'pending' : 'approved';
+
         const dataUpdate = {
             title: data.title,
             description: data.description,
             price: parseFloat(data.price),
-            status: 'pending',
+            status: finalStatus, // Cập nhật trạng thái sau khi kiểm duyệt
             imageUrls: JSON.stringify(finalImage),
             dimensions: data.dimensions,
             authorId: userId,
@@ -219,7 +261,7 @@ const removeArtwork = async (req, res) => {
         await artworkModel.remove(id);
         return res.json({ message: 'Xoá thành công' });
     } catch (error) {
-        return res.status(500).json({error: 'Lỗi khi xoá tác phẩm ', error})
+        return res.status(500).json({ error: 'Lỗi khi xoá tác phẩm ', error })
     }
 }
 //tìm tác phẩm nổi bật
