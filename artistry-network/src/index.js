@@ -6,6 +6,8 @@ const app = express();
 const prisma = new PrismaClient;
 const port = 3000;
 
+require('dotenv').config();
+
 app.use(cors());
 //   Xử lý JSON data
 app.use(express.json());
